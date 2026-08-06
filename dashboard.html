@@ -69,7 +69,7 @@
     <div class="brand"><i class="fa-solid fa-earth-africa"></i> GeoVision</div>
     <ul class="nav-list">
       <li class="nav-item active" onclick="switchTab('hero', event)"><i class="fa-solid fa-house"></i> Hero & Profile Photo</li>
-      <li class="nav-item" onclick="switchTab('about', event)"><i class="fa-solid fa-address-card"></i> About & Files</li>
+      <li class="nav-item" onclick="switchTab('about', event)"><i class="fa-solid fa-address-card"></i> About & Info Grid</li>
       <li class="nav-item" onclick="switchTab('stats', event)"><i class="fa-solid fa-chart-simple"></i> Stats Banner</li>
       <li class="nav-item" onclick="switchTab('skills', event)"><i class="fa-solid fa-layer-group"></i> Technical Skills</li>
       <li class="nav-item" onclick="switchTab('projects', event)"><i class="fa-solid fa-folder"></i> Practical Projects</li>
@@ -100,14 +100,17 @@
       <button class="btn-save" onclick="saveSiteSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
     </section>
 
-    <!-- ABOUT -->
+    <!-- ABOUT CONTROL PANEL -->
     <section id="sec-about" class="panel-section">
-      <h2 class="dash-section-title"><i class="fa-solid fa-address-card"></i> About & <span>Links</span></h2>
+      <h2 class="dash-section-title"><i class="fa-solid fa-address-card"></i> About Section <span>Control</span></h2>
       <div class="form-grid">
-        <div class="form-group full-width"><label>About Paragraph 1</label><textarea id="aboutP1"></textarea></div>
-        <div class="form-group full-width"><label>About Paragraph 2</label><textarea id="aboutP2"></textarea></div>
-        <div class="form-group"><label>CV Link</label><input type="text" id="cvLink"></div>
-        <div class="form-group"><label>Thesis Link</label><input type="text" id="thesisLink"></div>
+        <div class="form-group full-width"><label>Greeting Title</label><input type="text" id="aboutGreeting" placeholder="Hello, I'm Mohamed."></div>
+        <div class="form-group"><label>University</label><input type="text" id="aboutUni" placeholder="Hassan II University"></div>
+        <div class="form-group"><label>Major</label><input type="text" id="aboutMajor" placeholder="Geography & GIS"></div>
+        <div class="form-group"><label>Country</label><input type="text" id="aboutCountry" placeholder="Morocco"></div>
+        <div class="form-group"><label>Languages</label><input type="text" id="aboutLanguages" placeholder="Arabic • English • French"></div>
+        <div class="form-group full-width"><label>Description</label><textarea id="aboutDesc" placeholder="Passionate about geospatial analysis..."></textarea></div>
+        <div class="form-group full-width"><label>CV Link</label><input type="text" id="cvLink"></div>
       </div>
       <button class="btn-save" onclick="saveSiteSettings()"><i class="fa-solid fa-floppy-disk"></i> Save About Section</button>
     </section>
@@ -246,10 +249,16 @@
       if (data) {
         document.getElementById('heroTitle').value = data.hero_title || '';
         document.getElementById('heroSub').value = data.hero_sub || '';
-        document.getElementById('aboutP1').value = data.about_p1 || '';
-        document.getElementById('aboutP2').value = data.about_p2 || '';
+        
+        /* LOAD ABOUT SETTINGS */
+        if (document.getElementById('aboutGreeting')) document.getElementById('aboutGreeting').value = data.about_greeting || "Hello, I'm Mohamed.";
+        if (document.getElementById('aboutUni')) document.getElementById('aboutUni').value = data.about_uni || "Hassan II University";
+        if (document.getElementById('aboutMajor')) document.getElementById('aboutMajor').value = data.about_major || "Geography & GIS";
+        if (document.getElementById('aboutCountry')) document.getElementById('aboutCountry').value = data.about_country || "Morocco";
+        if (document.getElementById('aboutLanguages')) document.getElementById('aboutLanguages').value = data.about_languages || "Arabic • English • French";
+        if (document.getElementById('aboutDesc')) document.getElementById('aboutDesc').value = data.about_desc || "Passionate about geospatial analysis, remote sensing, and spatial web tools.";
+
         document.getElementById('cvLink').value = data.cv_link || '';
-        document.getElementById('thesisLink').value = data.thesis_link || '';
         document.getElementById('stat1Val').value = data.stat1_val || '';
         document.getElementById('stat1Lbl').value = data.stat1_lbl || '';
         document.getElementById('stat2Val').value = data.stat2_val || '';
@@ -267,10 +276,13 @@
       const payload = {
         hero_title: document.getElementById('heroTitle').value,
         hero_sub: document.getElementById('heroSub').value,
-        about_p1: document.getElementById('aboutP1').value,
-        about_p2: document.getElementById('aboutP2').value,
+        about_greeting: document.getElementById('aboutGreeting')?.value,
+        about_uni: document.getElementById('aboutUni')?.value,
+        about_major: document.getElementById('aboutMajor')?.value,
+        about_country: document.getElementById('aboutCountry')?.value,
+        about_languages: document.getElementById('aboutLanguages')?.value,
+        about_desc: document.getElementById('aboutDesc')?.value,
         cv_link: document.getElementById('cvLink').value,
-        thesis_link: document.getElementById('thesisLink').value,
         stat1_val: document.getElementById('stat1Val').value,
         stat1_lbl: document.getElementById('stat1Lbl').value,
         stat2_val: document.getElementById('stat2Val').value,
