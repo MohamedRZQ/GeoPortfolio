@@ -38,7 +38,7 @@
 
         /* Improved & Lighter Dark Mode Styles */
         html.dark body {
-            background-color: #0f172a; /* لون كحلي أفتح وأكثر وضوحاً بدلاً من الظلمة الشديدة */
+            background-color: #0f172a;
             color: #f1f5f9;
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
@@ -46,7 +46,7 @@
         }
 
         html.dark .glass-card {
-            background: rgba(30, 41, 59, 0.7); /* خلفية بطاقات أفتح وأوضح */
+            background: rgba(30, 41, 59, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
         }
@@ -265,7 +265,7 @@
             justify-content: center;
         }
 
-        /* --- STYLED PROJECT CARDS (EXACT MATCH TO ATTACHED IMAGE) --- */
+        /* --- STYLED PROJECT CARDS --- */
         .project-card-custom {
             border-radius: 16px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -399,21 +399,76 @@
         </div>
     </section>
 
-    <!-- ABOUT SECTION -->
-    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="about">
-        <div class="glass-card p-10 relative overflow-hidden rounded-2xl">
-            <h2 class="text-3xl font-bold text-primary mb-6">About Me</h2>
-            <p id="aboutP1Display" class="text-card-desc text-lg leading-relaxed mb-4"></p>
-            <p id="aboutP2Display" class="text-card-desc text-base leading-relaxed"></p>
-            <div id="thesisBox" class="mt-6 hidden">
-                <a id="thesisLinkDisplay" href="#" target="_blank" class="inline-flex items-center gap-2 text-secondary font-label-mono text-sm underline font-semibold">
-                    <span class="material-symbols-outlined">description</span> View Academic Thesis
-                </a>
+    <!-- ABOUT SECTION (UPDATED TO EXACT MATCH image_9d4ed3.png DESIGN) -->
+    <section class="py-20 px-8 max-w-[1200px] mx-auto" id="about">
+        <h2 class="text-3xl font-bold text-card-title text-center mb-10">About Me</h2>
+        
+        <div class="glass-card p-8 md:p-10 rounded-3xl border border-gray-500/20">
+            <div class="flex flex-col md:flex-row gap-8 items-stretch">
+                <!-- Left Column: Avatar Frame -->
+                <div class="w-full md:w-[260px] shrink-0">
+                    <div class="w-full h-full min-h-[260px] rounded-2xl overflow-hidden border border-gray-500/30 bg-gray-800/40">
+                        <img id="aboutImgDisplay" src="https://via.placeholder.com/300" class="w-full h-full object-cover" alt="Mohamed">
+                    </div>
+                </div>
+
+                <!-- Right Column: Content & Info Grid -->
+                <div class="flex-1 flex flex-col justify-between gap-6">
+                    <div>
+                        <h3 id="aboutGreetingDisplay" class="text-3xl font-bold text-card-title mb-6">Hello, I'm Mohamed.</h3>
+                        
+                        <!-- 4 Info Boxes -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Box 1 -->
+                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                                <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">UNIVERSITY</span>
+                                <span id="aboutUniDisplay" class="font-bold text-sm text-card-title">Hassan II University</span>
+                            </div>
+                            
+                            <!-- Box 2 -->
+                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                                <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">MAJOR</span>
+                                <span id="aboutMajorDisplay" class="font-bold text-sm text-card-title">Geography & GIS</span>
+                            </div>
+
+                            <!-- Box 3 -->
+                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                                <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">COUNTRY</span>
+                                <span id="aboutCountryDisplay" class="font-bold text-sm text-card-title">Morocco</span>
+                            </div>
+
+                            <!-- Box 4 -->
+                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                                <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">LANGUAGES</span>
+                                <span id="aboutLangDisplay" class="font-bold text-sm text-card-title">Arabic • English • French</span>
+                            </div>
+                        </div>
+
+                        <p id="aboutDescDisplay" class="text-card-desc text-sm leading-relaxed mt-6">
+                            Passionate about geospatial analysis, remote sensing, and spatial web tools.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-3 pt-2">
+                        <a id="aboutCvBtn" href="#" target="_blank" class="glow-button px-5 py-2.5 rounded-xl font-semibold text-xs inline-flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">download</span> Download CV
+                        </a>
+                        
+                        <a id="aboutGithubBtn" href="#" target="_blank" class="px-5 py-2.5 rounded-xl font-semibold text-xs border border-gray-500/30 text-card-title hover:bg-gray-500/10 transition-colors inline-flex items-center gap-2">
+                            <i class="fa-brands fa-github text-sm"></i> GitHub
+                        </a>
+
+                        <a id="aboutLinkedinBtn" href="#" target="_blank" class="px-5 py-2.5 rounded-xl font-semibold text-xs border border-gray-500/30 text-card-title hover:bg-gray-500/10 transition-colors inline-flex items-center gap-2">
+                            <i class="fa-brands fa-linkedin text-sm"></i> LinkedIn
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- DYNAMIC PROJECTS SECTION (MATCHING EXACT TARGET DESIGN) -->
+    <!-- DYNAMIC PROJECTS SECTION -->
     <section class="py-20 px-8 max-w-[1440px] mx-auto" id="projects">
         <div class="flex justify-between items-end mb-10">
             <div class="flex items-center gap-4">
@@ -433,7 +488,6 @@
             <!-- Projects injected here via JS -->
         </div>
 
-        <!-- Carousel Indicators Mockup -->
         <div class="flex justify-center items-center gap-2 mt-8">
             <span class="w-6 h-2 rounded-full bg-primary"></span>
             <span class="w-2 h-2 rounded-full bg-gray-600/40"></span>
@@ -524,15 +578,21 @@
         fetchVolunteer();
     });
 
-    /* 1. SITE SETTINGS & HERO */
+    /* 1. SITE SETTINGS & ABOUT SECTION DATA */
     async function fetchSiteSettings() {
         const { data } = await supabaseClient.from('site_settings').select('*').single();
         if (data) {
             if (data.hero_title) document.getElementById('heroTitleDisplay').innerHTML = data.hero_title;
             if (data.hero_sub) document.getElementById('heroSubDisplay').innerText = data.hero_sub;
-            if (data.about_p1) document.getElementById('aboutP1Display').innerText = data.about_p1;
-            if (data.about_p2) document.getElementById('aboutP2Display').innerText = data.about_p2;
             
+            /* ABOUT SECTION DATA BINDING */
+            if (data.about_greeting) document.getElementById('aboutGreetingDisplay').innerText = data.about_greeting;
+            if (data.about_uni) document.getElementById('aboutUniDisplay').innerText = data.about_uni;
+            if (data.about_major) document.getElementById('aboutMajorDisplay').innerText = data.about_major;
+            if (data.about_country) document.getElementById('aboutCountryDisplay').innerText = data.about_country;
+            if (data.about_languages) document.getElementById('aboutLangDisplay').innerText = data.about_languages;
+            if (data.about_desc) document.getElementById('aboutDescDisplay').innerText = data.about_desc;
+
             if (data.stat1_val) document.getElementById('stat1Val').innerText = data.stat1_val;
             if (data.stat1_lbl) document.getElementById('stat1Lbl').innerText = data.stat1_lbl;
             if (data.stat2_val) document.getElementById('stat2Val').innerText = data.stat2_val;
@@ -540,20 +600,29 @@
             if (data.stat3_val) document.getElementById('stat3Val').innerText = data.stat3_val;
             if (data.stat3_lbl) document.getElementById('stat3Lbl').innerText = data.stat3_lbl;
 
-            if (data.cv_link) document.getElementById('cvLinkDisplay').href = data.cv_link;
-            if (data.thesis_link) {
-                document.getElementById('thesisLinkDisplay').href = data.thesis_link;
-                document.getElementById('thesisBox').classList.remove('hidden');
+            if (data.cv_link) {
+                document.getElementById('cvLinkDisplay').href = data.cv_link;
+                document.getElementById('aboutCvBtn').href = data.cv_link;
             }
 
-            if (data.profile_url) document.getElementById('profileImgDisplay').src = data.profile_url;
-            if (data.github_url) document.getElementById('githubLink').href = data.github_url;
-            if (data.linkedin_url) document.getElementById('linkedinLink').href = data.linkedin_url;
+            if (data.profile_url) {
+                document.getElementById('profileImgDisplay').src = data.profile_url;
+                document.getElementById('aboutImgDisplay').src = data.profile_url;
+            }
+
+            if (data.github_url) {
+                document.getElementById('githubLink').href = data.github_url;
+                document.getElementById('aboutGithubBtn').href = data.github_url;
+            }
+            if (data.linkedin_url) {
+                document.getElementById('linkedinLink').href = data.linkedin_url;
+                document.getElementById('aboutLinkedinBtn').href = data.linkedin_url;
+            }
             if (data.email_address) document.getElementById('emailLink').href = `mailto:${data.email_address}`;
         }
     }
 
-    /* 2. PROJECTS (UPDATED EXACTLY TO MATCH THE PROVIDED IMAGE LAYOUT) */
+    /* 2. PROJECTS */
     async function fetchProjects() {
         const { data } = await supabaseClient.from('projects').select('*').order('id', { ascending: false });
         const grid = document.getElementById('projectsGrid');
@@ -569,31 +638,21 @@
             return `
             <div class="glass-card project-card-custom p-5 flex flex-col justify-between h-full border border-slate-700/50">
                 <div>
-                    <!-- Image Box -->
                     <div class="w-full h-48 mb-5 overflow-hidden rounded-xl bg-slate-800/80 border border-slate-700/40">
                         <img src="${p.image_url || 'https://via.placeholder.com/400x250'}" class="w-full h-full object-cover" alt="${p.title}">
                     </div>
-
-                    <!-- Category / Tag -->
                     <div class="flex items-center gap-2 mb-2 text-primary font-medium text-xs">
                         <span class="material-symbols-outlined text-base">public</span>
                         <span>${tag}</span>
                     </div>
-
-                    <!-- Project Title -->
                     <h3 class="font-bold text-xl text-card-title mb-2 leading-snug">${p.title}</h3>
-
-                    <!-- Description -->
                     <p class="text-card-desc text-xs leading-relaxed line-clamp-3 mb-6">${p.description || ''}</p>
                 </div>
-
-                <!-- Footer Action Area -->
                 <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between">
                     <div class="flex items-center gap-1.5 text-card-desc text-xs font-label-mono">
                         <span class="material-symbols-outlined text-base">calendar_today</span>
                         <span>${year}</span>
                     </div>
-
                     <a href="${p.link || '#'}" target="_blank" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-xs transition-colors">
                         <span>View Project</span>
                         <div class="w-7 h-7 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center">
