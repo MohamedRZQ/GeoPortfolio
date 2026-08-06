@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>GeoVision - Dynamic Portfolio</title>
+    <!-- Tailwind CSS & Icons -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#10b981",
+                "secondary": "#0284c7",
+                "tertiary": "#6366f1",
+              },
+              fontFamily: {
+                "label-mono": ["JetBrains Mono"],
+                "body-md": ["Inter"],
+                "display-lg": ["Space Grotesk"]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Improved & Lighter Dark Mode Styles */
+        html.dark body {
+            background-color: #012c33; /* لون كحلي أفتح وأكثر وضوحاً بدلاً من الظلمة الشديدة */
+            color: #f1f9f6;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        }
+
+        html.dark .glass-card {
+            background: rgba(30, 41, 59, 0.7); /* خلفية بطاقات أفتح وأوضح */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        html.dark .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        html.dark .text-card-title { color: #ffffff; }
+        html.dark .text-card-desc { color: #94a3b8; }
+
+        /* Light Mode Styles */
+        html:not(.dark) body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            background-image: 
+                linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+        }
+
+        html:not(.dark) .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        html:not(.dark) .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        html:not(.dark) .text-card-title { color: #0f172a; }
+        html:not(.dark) .text-card-desc { color: #475569; }
+
+        body {
+            overflow-x: hidden;
+            background-size: 80px 80px;
+            background-position: center center;
+            background-attachment: fixed;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #10b981 0%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glow-button {
+            background-color: #10b981;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+            transform: scale(1.03);
+        }
+
+        .glow-outline-button {
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            color: #10b981;
+            transition: all 0.3s ease;
+        }
+
+        .glow-outline-button:hover {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* --- SATELLITE ORBIT DESIGN --- */
+        .orbit-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(16, 185, 129, 0.25);
+            pointer-events: none;
+        }
+
+        .orbit-1 {
+            width: 320px;
+            height: 320px;
+            animation: spinOrbit 14s linear infinite;
+        }
+
+        .orbit-2 {
+            width: 440px;
+            height: 440px;
+            border-color: rgba(2, 132, 199, 0.2);
+            animation: spinOrbitReverse 22s linear infinite;
+        }
+
+        .satellite {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: transparent;
+            border: none;
+            color: #10b981;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+            animation: keepTextUpright 14s linear infinite;
+        }
+
+        .satellite-2 {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: transparent;
+            border: none;
+            color: #0284c7;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            text-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
+            animation: keepTextUprightReverse 22s linear infinite;
+        }
+
+        @keyframes spinOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spinOrbitReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
+        @keyframes keepTextUpright {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(-360deg); }
+        }
+
+        @keyframes keepTextUprightReverse {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .profile-avatar-frame {
+            position: relative;
+            z-index: 10;
+            width: 210px;
+            height: 210px;
+            border-radius: 50%;
+            padding: 7px;
+            background: linear-gradient(135deg, #10b981, #0284c7, #6366f1);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.35);
+        }
+
+        .profile-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #0f172a;
+        }
+
+        /* --- GEOMETRIC PARALLELOGRAM & CUTOUT SHAPES --- */
+        .geo-parallelogram {
+            transform: skewX(-12deg);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .geo-parallelogram > * {
+            transform: skewX(12deg);
+        }
+
+        .geo-parallelogram:hover {
+            transform: skewX(-12deg) translateY(-5px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .hex-icon-box {
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- STYLED PROJECT CARDS (EXACT MATCH TO ATTACHED IMAGE) --- */
+        .project-card-custom {
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card-custom:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Dynamic Top NavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav backdrop-blur-xl transition-colors duration-400">
+    <div class="flex justify-between items-center px-8 py-4 max-w-[1440px] mx-auto">
+        <div class="font-display-lg text-2xl text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
+            <span class="font-bold tracking-tight">GeoVision</span>
+        </div>
+        
+        <div class="hidden md:flex items-center gap-8 font-body-md font-medium">
+            <a class="text-primary border-b-2 border-primary pb-1" href="#home">Home</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#about">About</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#projects">Projects</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#skills">Skills</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#certs">Certifications</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#volunteer">Volunteer</a>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2.5 rounded-full border border-gray-500/30 hover:bg-gray-500/10 transition-colors flex items-center justify-center text-primary cursor-pointer" title="Toggle Dark/Light Mode">
+                <span id="themeIcon" class="material-symbols-outlined text-xl">light_mode</span>
+            </button>
+
+            <a id="btnContact" href="#contact" class="hidden md:inline-flex items-center justify-center glow-button px-6 py-2 rounded-full font-body-md font-semibold text-sm cursor-pointer">
+                Let's Connect
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-[100px]" id="home">
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[85vh] flex items-center px-8 max-w-[1440px] mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full z-10">
+            <div class="flex flex-col gap-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 w-fit">
+                    <span class="pulse-dot"></span>
+                    <span class="font-label-mono text-xs text-primary font-bold uppercase tracking-wider">GIS Specialist & Remote Sensing Analyst</span>
+                </div>
+                
+                <h1 id="heroTitleDisplay" class="font-display-lg text-4xl md:text-6xl font-bold text-card-title leading-tight">
+                    Spatial Data Science & <br/>
+                    <span class="text-gradient">Web GIS Solutions</span>
+                </h1>
+                <p id="heroSubDisplay" class="font-body-lg text-card-desc max-w-xl text-lg">
+                    Developing geospatial analytics, satellite remote sensing workflows, and interactive web mapping applications.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-2">
+                    <a href="#projects" class="glow-button px-8 py-4 rounded-full font-semibold flex items-center gap-2">
+                        View Projects <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                    <a id="cvLinkDisplay" href="#" target="_blank" class="glow-outline-button px-8 py-4 rounded-full font-semibold flex items-center gap-2">
+                        Download CV <span class="material-symbols-outlined">download</span>
+                    </a>
+                </div>
+
+                <!-- DYNAMIC GEOMETRIC STATS CARDS -->
+                <div class="grid grid-cols-3 gap-6 mt-6 pt-6 border-t border-gray-500/20">
+                    <div class="glass-card geo-parallelogram p-4 flex items-center gap-3 border-l-4 border-l-primary">
+                        <div class="w-10 h-10 hex-icon-box bg-primary/20 text-primary">
+                            <span class="material-symbols-outlined text-lg">folder_open</span>
+                        </div>
+                        <div>
+                            <div id="stat1Val" class="text-xl font-bold text-card-title">15+</div>
+                            <div id="stat1Lbl" class="font-label-mono text-[11px] text-card-desc">Completed Projects</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card geo-parallelogram p-4 flex items-center gap-3 border-l-4 border-l-secondary">
+                        <div class="w-10 h-10 hex-icon-box bg-secondary/20 text-secondary">
+                            <span class="material-symbols-outlined text-lg">code</span>
+                        </div>
+                        <div>
+                            <div id="stat2Val" class="text-xl font-bold text-card-title">4+</div>
+                            <div id="stat2Lbl" class="font-label-mono text-[11px] text-card-desc">Technical Skills</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card geo-parallelogram p-4 flex items-center gap-3 border-l-4 border-l-tertiary">
+                        <div class="w-10 h-10 hex-icon-box bg-tertiary/20 text-tertiary">
+                            <span class="material-symbols-outlined text-lg">verified</span>
+                        </div>
+                        <div>
+                            <div id="stat3Val" class="text-xl font-bold text-card-title">100%</div>
+                            <div id="stat3Lbl" class="font-label-mono text-[11px] text-card-desc">Credentials Earned</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE AVATAR WITH SATELLITES -->
+            <div class="orbit-container hidden md:flex">
+                <div class="orbit-ring orbit-2">
+                    <div class="satellite-2">
+                        <span class="material-symbols-outlined text-base">satellite_alt</span> Sentinel-2
+                    </div>
+                </div>
+
+                <div class="orbit-ring orbit-1">
+                    <div class="satellite">
+                        <span class="material-symbols-outlined text-base">satellite</span> Landsat 9
+                    </div>
+                </div>
+
+                <div class="relative flex flex-col items-center">
+                    <div class="profile-avatar-frame">
+                        <img id="profileImgDisplay" src="https://via.placeholder.com/300" class="profile-avatar-img" alt="Profile Avatar">
+                    </div>
+                    
+                    <div class="mt-4 glass-card px-5 py-2.5 flex items-center gap-3 backdrop-blur-xl border border-primary/30 z-20">
+                        <span class="pulse-dot"></span>
+                        <div>
+                            <h4 class="font-bold text-xs text-card-title">Geospatial Intelligence</h4>
+                            <p class="font-label-mono text-[10px] text-card-desc">Casablanca, Morocco</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="about">
+        <div class="glass-card p-10 relative overflow-hidden rounded-2xl">
+            <h2 class="text-3xl font-bold text-primary mb-6">About Me</h2>
+            <p id="aboutP1Display" class="text-card-desc text-lg leading-relaxed mb-4"></p>
+            <p id="aboutP2Display" class="text-card-desc text-base leading-relaxed"></p>
+            <div id="thesisBox" class="mt-6 hidden">
+                <a id="thesisLinkDisplay" href="#" target="_blank" class="inline-flex items-center gap-2 text-secondary font-label-mono text-sm underline font-semibold">
+                    <span class="material-symbols-outlined">description</span> View Academic Thesis
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DYNAMIC PROJECTS SECTION (MATCHING EXACT TARGET DESIGN) -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="projects">
+        <div class="flex justify-between items-end mb-10">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-2xl">view_carousel</span>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-card-title">Featured Projects</h2>
+                </div>
+            </div>
+            <a href="#projects" class="text-primary hover:underline font-label-mono text-sm font-semibold flex items-center gap-1.5">
+                View All Projects <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
+        </div>
+
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Projects injected here via JS -->
+        </div>
+
+        <!-- Carousel Indicators Mockup -->
+        <div class="flex justify-center items-center gap-2 mt-8">
+            <span class="w-6 h-2 rounded-full bg-primary"></span>
+            <span class="w-2 h-2 rounded-full bg-gray-600/40"></span>
+            <span class="w-2 h-2 rounded-full bg-gray-600/40"></span>
+        </div>
+    </section>
+
+    <!-- DYNAMIC SKILLS SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="skills">
+        <div class="flex items-center gap-3 mb-12 justify-center">
+            <span class="material-symbols-outlined text-primary text-3xl">bolt</span>
+            <h2 class="text-3xl font-bold text-card-title">Technical Skills & Expertise</h2>
+        </div>
+        <div id="skillsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Skills injected here via JS -->
+        </div>
+    </section>
+
+    <!-- DYNAMIC CERTIFICATIONS SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="certs">
+        <div class="flex items-center gap-3 mb-12">
+            <span class="material-symbols-outlined text-primary text-3xl">verified</span>
+            <h2 class="text-3xl font-bold text-card-title">Certifications & Credentials</h2>
+        </div>
+        <div id="certsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1440px] mx-auto">
+            <!-- Certifications injected here via JS -->
+        </div>
+    </section>
+
+    <!-- DYNAMIC VOLUNTEER WORK SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="volunteer">
+        <h2 class="text-3xl font-bold text-card-title mb-12 text-center">Volunteer & Community Work</h2>
+        <div id="volunteerContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1440px] mx-auto">
+            <!-- Volunteer items injected here via JS -->
+        </div>
+    </section>
+</main>
+
+<!-- FOOTER WITH DYNAMIC CONTACT LINKS -->
+<footer class="w-full border-t border-gray-500/20 py-8 mt-20" id="contact">
+    <div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-[1440px] mx-auto gap-4">
+        <div class="font-display-lg text-2xl text-primary font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined">public</span> GeoVision
+        </div>
+        <div class="font-label-mono text-xs text-card-desc">
+            © 2026 GeoVision. All Dashboard Data Integrated Live.
+        </div>
+        <div class="flex items-center gap-6 font-label-mono text-sm">
+            <a id="githubLink" href="#" target="_blank" class="text-card-desc hover:text-secondary transition-colors"><i class="fa-brands fa-github"></i> GitHub</a>
+            <a id="linkedinLink" href="#" target="_blank" class="text-card-desc hover:text-secondary transition-colors"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            <a id="emailLink" href="#" class="text-card-desc hover:text-secondary transition-colors"><i class="fa-solid fa-envelope"></i> Email</a>
+        </div>
+    </div>
+</footer>
+
+<!-- SUPABASE INTEGRATION & THEME SCRIPT -->
+<script>
+    const SUPABASE_URL = 'https://brydreaiwlbzbagsvezd.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_JsfgZNNi3-rS57fg8HwfeA_k604yWcv';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById('themeIcon');
+        
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            icon.innerText = 'dark_mode';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.classList.add('dark');
+            icon.innerText = 'light_mode';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeIcon').innerText = 'dark_mode';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        fetchSiteSettings();
+        fetchProjects();
+        fetchSkills();
+        fetchCertifications();
+        fetchVolunteer();
+    });
+
+    /* 1. SITE SETTINGS & HERO */
+    async function fetchSiteSettings() {
+        const { data } = await supabaseClient.from('site_settings').select('*').single();
+        if (data) {
+            if (data.hero_title) document.getElementById('heroTitleDisplay').innerHTML = data.hero_title;
+            if (data.hero_sub) document.getElementById('heroSubDisplay').innerText = data.hero_sub;
+            if (data.about_p1) document.getElementById('aboutP1Display').innerText = data.about_p1;
+            if (data.about_p2) document.getElementById('aboutP2Display').innerText = data.about_p2;
+            
+            if (data.stat1_val) document.getElementById('stat1Val').innerText = data.stat1_val;
+            if (data.stat1_lbl) document.getElementById('stat1Lbl').innerText = data.stat1_lbl;
+            if (data.stat2_val) document.getElementById('stat2Val').innerText = data.stat2_val;
+            if (data.stat2_lbl) document.getElementById('stat2Lbl').innerText = data.stat2_lbl;
+            if (data.stat3_val) document.getElementById('stat3Val').innerText = data.stat3_val;
+            if (data.stat3_lbl) document.getElementById('stat3Lbl').innerText = data.stat3_lbl;
+
+            if (data.cv_link) document.getElementById('cvLinkDisplay').href = data.cv_link;
+            if (data.thesis_link) {
+                document.getElementById('thesisLinkDisplay').href = data.thesis_link;
+                document.getElementById('thesisBox').classList.remove('hidden');
+            }
+
+            if (data.profile_url) document.getElementById('profileImgDisplay').src = data.profile_url;
+            if (data.github_url) document.getElementById('githubLink').href = data.github_url;
+            if (data.linkedin_url) document.getElementById('linkedinLink').href = data.linkedin_url;
+            if (data.email_address) document.getElementById('emailLink').href = `mailto:${data.email_address}`;
+        }
+    }
+
+    /* 2. PROJECTS (UPDATED EXACTLY TO MATCH THE PROVIDED IMAGE LAYOUT) */
+    async function fetchProjects() {
+        const { data } = await supabaseClient.from('projects').select('*').order('id', { ascending: false });
+        const grid = document.getElementById('projectsGrid');
+        if (!data || data.length === 0) {
+            grid.innerHTML = `<p class="text-card-desc">No projects available.</p>`;
+            return;
+        }
+
+        grid.innerHTML = data.map(p => {
+            const year = p.created_at ? new Date(p.created_at).getFullYear() : '2024';
+            const tag = p.tag || 'GIS Analysis';
+            
+            return `
+            <div class="glass-card project-card-custom p-5 flex flex-col justify-between h-full border border-slate-700/50">
+                <div>
+                    <!-- Image Box -->
+                    <div class="w-full h-48 mb-5 overflow-hidden rounded-xl bg-slate-800/80 border border-slate-700/40">
+                        <img src="${p.image_url || 'https://via.placeholder.com/400x250'}" class="w-full h-full object-cover" alt="${p.title}">
+                    </div>
+
+                    <!-- Category / Tag -->
+                    <div class="flex items-center gap-2 mb-2 text-primary font-medium text-xs">
+                        <span class="material-symbols-outlined text-base">public</span>
+                        <span>${tag}</span>
+                    </div>
+
+                    <!-- Project Title -->
+                    <h3 class="font-bold text-xl text-card-title mb-2 leading-snug">${p.title}</h3>
+
+                    <!-- Description -->
+                    <p class="text-card-desc text-xs leading-relaxed line-clamp-3 mb-6">${p.description || ''}</p>
+                </div>
+
+                <!-- Footer Action Area -->
+                <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between">
+                    <div class="flex items-center gap-1.5 text-card-desc text-xs font-label-mono">
+                        <span class="material-symbols-outlined text-base">calendar_today</span>
+                        <span>${year}</span>
+                    </div>
+
+                    <a href="${p.link || '#'}" target="_blank" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-xs transition-colors">
+                        <span>View Project</span>
+                        <div class="w-7 h-7 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        `}).join('');
+    }
+
+    /* 3. SKILLS */
+    async function fetchSkills() {
+        const { data } = await supabaseClient.from('skills').select('*').order('id', { ascending: false });
+        const grid = document.getElementById('skillsGrid');
+        if (!data || data.length === 0) return;
+
+        grid.innerHTML = data.map((s, idx) => {
+            const colors = ['border-primary text-primary bg-primary/10', 'border-secondary text-secondary bg-secondary/10', 'border-tertiary text-tertiary bg-tertiary/10', 'border-amber-500 text-amber-500 bg-amber-500/10'];
+            const icons = ['public', 'analytics', 'code', 'table_chart'];
+            const currentColor = colors[idx % colors.length];
+            const currentIcon = icons[idx % icons.length];
+
+            return `
+                <div class="glass-card geo-parallelogram p-6 text-center flex flex-col items-center justify-center border-b-4 ${currentColor.split(' ')[0]}">
+                    <div class="w-14 h-14 rounded-full ${currentColor.split(' ')[2]} flex items-center justify-center ${currentColor.split(' ')[1]} mb-3">
+                        <span class="material-symbols-outlined text-2xl">${currentIcon}</span>
+                    </div>
+                    <h3 class="font-bold text-base text-card-title">${s.category || 'Skill'}</h3>
+                    <p class="text-card-desc text-xs mt-1 font-label-mono">${s.name}</p>
+                    <div class="w-8 h-1 ${currentColor.split(' ')[1].replace('text-', 'bg-')} mt-3 rounded-full"></div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    /* 4. CERTIFICATIONS */
+    async function fetchCertifications() {
+        const { data } = await supabaseClient.from('certifications').select('*').order('id', { ascending: false });
+        const grid = document.getElementById('certsGrid');
+        if (!data || data.length === 0) return;
+
+        grid.innerHTML = data.map(c => `
+            <div class="glass-card geo-parallelogram p-5 flex flex-col justify-between border-r-4 border-r-primary h-full">
+                <div>
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        ${c.image_url ? `<img src="${c.image_url}" class="w-12 h-12 rounded-md object-cover border border-gray-500/20 shrink-0" alt="${c.title}">` : '<div class="w-12 h-12 rounded-md bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined">workspace_premium</span></div>'}
+                        <div class="w-8 h-8 hex-icon-box bg-primary/20 text-primary shrink-0">
+                            <span class="material-symbols-outlined text-sm">check_circle</span>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-card-title text-base leading-snug mb-1">${c.title}</h3>
+                    <p class="text-xs text-card-desc font-label-mono mb-2">${c.issuer || ''} ${c.date ? `• ${c.date}` : ''}</p>
+                </div>
+                ${c.cert_url ? `
+                <div class="mt-4 pt-2 border-t border-gray-500/20">
+                    <a href="${c.cert_url}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1 font-label-mono font-semibold">
+                        View Credential <span class="material-symbols-outlined text-[12px]">arrow_forward</span>
+                    </a>
+                </div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    /* 5. VOLUNTEER WORK */
+    async function fetchVolunteer() {
+        const { data } = await supabaseClient.from('volunteer_work').select('*').order('id', { ascending: false });
+        const container = document.getElementById('volunteerContainer');
+        if (!data || data.length === 0) return;
+
+        container.innerHTML = data.map(v => `
+            <div class="glass-card geo-parallelogram p-6 flex flex-col justify-between border-l-4 border-l-secondary">
+                <div>
+                    <div class="flex justify-between items-start mb-2 gap-2">
+                        <h3 class="font-bold text-lg text-card-title leading-snug">${v.role}</h3>
+                        <span class="font-label-mono text-[10px] text-primary px-2.5 py-1 bg-primary/10 rounded-full border border-primary/20 font-semibold shrink-0">${v.period || 'Active'}</span>
+                    </div>
+                    <h4 class="text-xs font-semibold text-secondary mb-3">${v.organization || ''}</h4>
+                    <p class="text-xs text-card-desc leading-relaxed">${v.description || ''}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+</script>
+</body>
+</html>
