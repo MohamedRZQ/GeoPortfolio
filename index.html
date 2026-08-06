@@ -17,9 +17,9 @@
           theme: {
             extend: {
               colors: {
-                "primary": "#10b981",
-                "secondary": "#0284c7",
-                "tertiary": "#6366f1",
+                "primary": "#0284c7",
+                "secondary": "#3b82f6",
+                "tertiary": "#2563eb",
               },
               fontFamily: {
                 "label-mono": ["JetBrains Mono"],
@@ -38,7 +38,7 @@
 
         /* Improved & Lighter Dark Mode Styles */
         html.dark body {
-            background-color: #0f172a;
+            background-color: #023335;
             color: #f1f5f9;
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
@@ -46,13 +46,13 @@
         }
 
         html.dark .glass-card {
-            background: rgba(30, 41, 59, 0.7);
+            background:  rgba(1, 44, 46, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
         }
 
         html.dark .glass-nav {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(1, 44, 46, 0.85);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -61,7 +61,7 @@
 
         /* Light Mode Styles */
         html:not(.dark) body {
-            background-color: #f8fafc;
+            background-color: #e5eeee;
             color: #0f172a;
             background-image: 
                 linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
@@ -69,7 +69,7 @@
         }
 
         html:not(.dark) .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(216, 247, 237, 0.178);
             border: 1px solid rgba(15, 23, 42, 0.08);
             box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.05);
         }
@@ -78,9 +78,6 @@
             background: rgba(255, 255, 255, 0.85);
             border-bottom: 1px solid rgba(15, 23, 42, 0.08);
         }
-
-        html:not(.dark) .text-card-title { color: #0f172a; }
-        html:not(.dark) .text-card-desc { color: #475569; }
 
         body {
             overflow-x: hidden;
@@ -97,35 +94,35 @@
         }
 
         .glow-button {
-            background-color: #10b981;
+            background-color: #1091b9;
             color: #ffffff;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 20px rgba(16, 151, 185, 0.3);
             transition: all 0.3s ease;
         }
 
         .glow-button:hover {
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 30px rgba(16, 151, 185, 0.3);
             transform: scale(1.03);
         }
 
         .glow-outline-button {
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            color: #10b981;
+            border: 1px solid rgba(16, 151, 185, 0.3);
+            color: #1091b9;
             transition: all 0.3s ease;
         }
 
         .glow-outline-button:hover {
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-            border-color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 151, 185, 0.3);
+            border-color: #1091b9;
         }
 
         .pulse-dot {
             width: 8px;
             height: 8px;
-            background-color: #10b981;
+            background-color: #1091b9;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 10px #10b981;
+            box-shadow: 0 0 10px #1091b9;
             animation: pulse 2s infinite;
         }
 
@@ -135,7 +132,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* --- SATELLITE ORBIT DESIGN --- */
+        /* --- SATELLITE ORBIT DESIGN MATCHING EXACT SPECIFICATION --- */
         .orbit-container {
             position: relative;
             width: 100%;
@@ -148,32 +145,31 @@
         .orbit-ring {
             position: absolute;
             border-radius: 50%;
-            border: 1px dashed rgba(16, 185, 129, 0.25);
+            border: 1px dashed rgba(16, 151, 185, 0.3);
             pointer-events: none;
         }
 
         .orbit-1 {
             width: 320px;
             height: 320px;
-            animation: spinOrbit 14s linear infinite;
+            animation: spinOrbit 25s linear infinite;
         }
 
         .orbit-2 {
-            width: 440px;
-            height: 440px;
-            border-color: rgba(2, 132, 199, 0.2);
-            animation: spinOrbitReverse 22s linear infinite;
+            width: 460px;
+            height: 460px;
+            border-color: rgba(16, 151, 185, 0.3);
+            animation: spinOrbitReverse 35s linear infinite;
         }
 
         .satellite {
             position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 50%;
+            right: -60px;
+            transform: translateY(-50%);
             background: transparent;
-            border: none;
             color: #10b981;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             font-family: 'JetBrains Mono', monospace;
             display: flex;
@@ -181,18 +177,16 @@
             gap: 6px;
             white-space: nowrap;
             text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-            animation: keepTextUpright 14s linear infinite;
+            animation: keepTextUpright 25s linear infinite;
         }
 
         .satellite-2 {
             position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 20px;
+            right: -20px;
             background: transparent;
-            border: none;
             color: #0284c7;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
             font-family: 'JetBrains Mono', monospace;
             display: flex;
@@ -200,7 +194,7 @@
             gap: 6px;
             white-space: nowrap;
             text-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
-            animation: keepTextUprightReverse 22s linear infinite;
+            animation: keepTextUprightReverse 35s linear infinite;
         }
 
         @keyframes spinOrbit {
@@ -210,36 +204,39 @@
 
         @keyframes spinOrbitReverse {
             from { transform: rotate(360deg); }
-            to { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
         }
 
         @keyframes keepTextUpright {
-            from { transform: translateX(-50%) rotate(0deg); }
-            to { transform: translateX(-50%) rotate(-360deg); }
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(-360deg); }
         }
 
         @keyframes keepTextUprightReverse {
-            from { transform: translateX(-50%) rotate(0deg); }
-            to { transform: translateX(-50%) rotate(360deg); }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .profile-avatar-frame {
+        /* GLOBE STYLES */
+        .globe-wrapper {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #0284c7);
+            padding: 6px;
+            box-shadow: 0 0 45px rgba(16, 185, 129, 0.4);
             position: relative;
             z-index: 10;
-            width: 210px;
-            height: 210px;
-            border-radius: 50%;
-            padding: 7px;
-            background: linear-gradient(135deg, #10b981, #0284c7, #6366f1);
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.35);
         }
 
-        .profile-avatar-img {
+        .globe-container {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #0f172a;
+            background: #0284c7;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         /* --- GEOMETRIC PARALLELOGRAM & CUTOUT SHAPES --- */
@@ -273,7 +270,7 @@
 
         .project-card-custom:hover {
             transform: translateY(-4px);
-            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px -5px rgba(0, 38, 53, 0.4);
         }
     </style>
 </head>
@@ -284,7 +281,7 @@
     <div class="flex justify-between items-center px-8 py-4 max-w-[1440px] mx-auto">
         <div class="font-display-lg text-2xl text-primary flex items-center gap-2">
             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
-            <span class="font-bold tracking-tight">GeoVision</span>
+            <span class="font-bold text-sky-600">GeoVision</span>
         </div>
         
         <div class="hidden md:flex items-center gap-8 font-body-md font-medium">
@@ -297,7 +294,7 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2.5 rounded-full border border-gray-500/30 hover:bg-gray-500/10 transition-colors flex items-center justify-center text-primary cursor-pointer" title="Toggle Dark/Light Mode">
+            <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2.5 rounded-full border border-sky-600/30 hover:bg-white-500/10 transition-colors flex items-center justify-center text-primary cursor-pointer" title="Toggle Dark/Light Mode">
                 <span id="themeIcon" class="material-symbols-outlined text-xl">light_mode</span>
             </button>
 
@@ -368,7 +365,7 @@
                 </div>
             </div>
 
-            <!-- PROFILE AVATAR WITH SATELLITES -->
+            <!-- GLOBE GRAPHIC WITH SATELLITES MATCHING IMAGE DESIGN -->
             <div class="orbit-container hidden md:flex">
                 <div class="orbit-ring orbit-2">
                     <div class="satellite-2">
@@ -378,20 +375,30 @@
 
                 <div class="orbit-ring orbit-1">
                     <div class="satellite">
-                        <span class="material-symbols-outlined text-base">satellite</span> Landsat 9
+                        <span class="material-symbols-outlined text-base">image</span> Landsat 9
                     </div>
                 </div>
 
                 <div class="relative flex flex-col items-center">
-                    <div class="profile-avatar-frame">
-                        <img id="profileImgDisplay" src="https://via.placeholder.com/300" class="profile-avatar-img" alt="Profile Avatar">
+                    <!-- VECTOR GLOBE DESIGN -->
+                    <div class="globe-wrapper">
+                        <div class="globe-container">
+                            <svg viewBox="0 0 100 100" class="w-full h-full">
+                                <rect width="100" height="100" fill="#0284c7" />
+                                <!-- Continents shape matching image_9a0d97.png -->
+                                <path d="M 15 35 Q 30 15 60 15 C 80 20 90 40 80 55 C 75 65 65 75 50 80 C 45 60 55 50 35 45 C 20 45 10 40 15 35 Z" fill="#10b981" />
+                                <path d="M 50 78 Q 65 75 70 85 C 60 92 45 90 50 78 Z" fill="#10b981" />
+                                <path d="M 25 22 C 35 15 45 18 35 28 Z" fill="#10b981" />
+                            </svg>
+                        </div>
                     </div>
                     
-                    <div class="mt-4 glass-card px-5 py-2.5 flex items-center gap-3 backdrop-blur-xl border border-primary/30 z-20">
+                    <!-- GEOSPATIAL INTELLIGENCE FLOATING BADGE -->
+                    <div class="mt-6 glass-card px-5 py-3 flex items-center gap-3 backdrop-blur-xl border border-primary/30 z-20 rounded-lg">
                         <span class="pulse-dot"></span>
                         <div>
-                            <h4 class="font-bold text-xs text-card-title">Geospatial Intelligence</h4>
-                            <p class="font-label-mono text-[10px] text-card-desc">Casablanca, Morocco</p>
+                            <h4 class="font-bold text-sm text-gradient">Geospatial Intelligence</h4>
+                            <p class="font-label-mono text-[11px] text-slate-400">Casablanca, Morocco</p>
                         </div>
                     </div>
                 </div>
@@ -399,8 +406,8 @@
         </div>
     </section>
 
-    <!-- ABOUT SECTION (UPDATED TO EXACT MATCH image_9d4ed3.png DESIGN) -->
-    <section class="py-20 px-8 max-w-[1200px] mx-auto" id="about">
+    <!-- ABOUT SECTION -->
+    <section class="py-20 px-8 max-w-[1500px] mx-auto" id="about">
         <h2 class="text-3xl font-bold text-card-title text-center mb-10">About Me</h2>
         
         <div class="glass-card p-8 md:p-10 rounded-3xl border border-gray-500/20">
@@ -420,25 +427,25 @@
                         <!-- 4 Info Boxes -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <!-- Box 1 -->
-                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                            <div class="bg-white-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
                                 <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">UNIVERSITY</span>
                                 <span id="aboutUniDisplay" class="font-bold text-sm text-card-title">Hassan II University</span>
                             </div>
                             
                             <!-- Box 2 -->
-                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                            <div class="bg-white-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
                                 <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">MAJOR</span>
                                 <span id="aboutMajorDisplay" class="font-bold text-sm text-card-title">Geography & GIS</span>
                             </div>
 
                             <!-- Box 3 -->
-                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                            <div class="bg-white-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
                                 <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">COUNTRY</span>
                                 <span id="aboutCountryDisplay" class="font-bold text-sm text-card-title">Morocco</span>
                             </div>
 
                             <!-- Box 4 -->
-                            <div class="bg-gray-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
+                            <div class="bg-white-800/20 border-l-4 border-l-primary p-3.5 rounded-r-xl border border-gray-500/10">
                                 <span class="block font-label-mono text-[10px] uppercase font-bold text-card-desc tracking-wider">LANGUAGES</span>
                                 <span id="aboutLangDisplay" class="font-bold text-sm text-card-title">Arabic • English • French</span>
                             </div>
@@ -489,9 +496,9 @@
         </div>
 
         <div class="flex justify-center items-center gap-2 mt-8">
-            <span class="w-6 h-2 rounded-full bg-primary"></span>
-            <span class="w-2 h-2 rounded-full bg-gray-600/40"></span>
-            <span class="w-2 h-2 rounded-full bg-gray-600/40"></span>
+            <span class="w-6 h-2 rounded-full bg-text-primary"></span>
+            <span class="w-2 h-2 rounded-full bg-text-primary/40"></span>
+            <span class="w-2 h-2 rounded-full bg-text-primary/40"></span>
         </div>
     </section>
 
@@ -571,170 +578,180 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        fetchSiteSettings();
-        fetchProjects();
-        fetchSkills();
-        fetchCertifications();
-        fetchVolunteer();
+        loadPortfolioData();
     });
 
-    /* 1. SITE SETTINGS & ABOUT SECTION DATA */
-    async function fetchSiteSettings() {
-        const { data } = await supabaseClient.from('site_settings').select('*').single();
-        if (data) {
-            if (data.hero_title) document.getElementById('heroTitleDisplay').innerHTML = data.hero_title;
-            if (data.hero_sub) document.getElementById('heroSubDisplay').innerText = data.hero_sub;
+    /* MASTER FUNCTION TO LOAD ALL PORTFOLIO DATA FROM SUPABASE */
+    async function loadPortfolioData() {
+        try {
+            // 1. Fetch Site Settings & About Info
+            const { data: settings, error: settingsErr } = await supabaseClient.from('site_settings').select('*').single();
+            if (settingsErr) console.warn('Settings fetch warning:', settingsErr);
             
-            /* ABOUT SECTION DATA BINDING */
-            if (data.about_greeting) document.getElementById('aboutGreetingDisplay').innerText = data.about_greeting;
-            if (data.about_uni) document.getElementById('aboutUniDisplay').innerText = data.about_uni;
-            if (data.about_major) document.getElementById('aboutMajorDisplay').innerText = data.about_major;
-            if (data.about_country) document.getElementById('aboutCountryDisplay').innerText = data.about_country;
-            if (data.about_languages) document.getElementById('aboutLangDisplay').innerText = data.about_languages;
-            if (data.about_desc) document.getElementById('aboutDescDisplay').innerText = data.about_desc;
+            if (settings) {
+                if (settings.hero_title) document.getElementById('heroTitleDisplay').innerHTML = settings.hero_title;
+                if (settings.hero_sub) document.getElementById('heroSubDisplay').innerText = settings.hero_sub;
+                
+                // About & Hero Section Binds
+                if (settings.about_greeting) document.getElementById('aboutGreetingDisplay').innerText = settings.about_greeting;
+                if (settings.about_uni) document.getElementById('aboutUniDisplay').innerText = settings.about_uni;
+                if (settings.about_major) document.getElementById('aboutMajorDisplay').innerText = settings.about_major;
+                if (settings.about_country) document.getElementById('aboutCountryDisplay').innerText = settings.about_country;
+                if (settings.about_languages) document.getElementById('aboutLangDisplay').innerText = settings.about_languages;
+                if (settings.about_desc) document.getElementById('aboutDescDisplay').innerText = settings.about_desc;
 
-            if (data.stat1_val) document.getElementById('stat1Val').innerText = data.stat1_val;
-            if (data.stat1_lbl) document.getElementById('stat1Lbl').innerText = data.stat1_lbl;
-            if (data.stat2_val) document.getElementById('stat2Val').innerText = data.stat2_val;
-            if (data.stat2_lbl) document.getElementById('stat2Lbl').innerText = data.stat2_lbl;
-            if (data.stat3_val) document.getElementById('stat3Val').innerText = data.stat3_val;
-            if (data.stat3_lbl) document.getElementById('stat3Lbl').innerText = data.stat3_lbl;
+                // Stats Cards
+                if (settings.stat1_val) document.getElementById('stat1Val').innerText = settings.stat1_val;
+                if (settings.stat1_lbl) document.getElementById('stat1Lbl').innerText = settings.stat1_lbl;
+                if (settings.stat2_val) document.getElementById('stat2Val').innerText = settings.stat2_val;
+                if (settings.stat2_lbl) document.getElementById('stat2Lbl').innerText = settings.stat2_lbl;
+                if (settings.stat3_val) document.getElementById('stat3Val').innerText = settings.stat3_val;
+                if (settings.stat3_lbl) document.getElementById('stat3Lbl').innerText = settings.stat3_lbl;
 
-            if (data.cv_link) {
-                document.getElementById('cvLinkDisplay').href = data.cv_link;
-                document.getElementById('aboutCvBtn').href = data.cv_link;
+                // Download CV Links
+                if (settings.cv_link) {
+                    const cvDisplay = document.getElementById('cvLinkDisplay');
+                    const aboutCv = document.getElementById('aboutCvBtn');
+                    if (cvDisplay) cvDisplay.href = settings.cv_link;
+                    if (aboutCv) aboutCv.href = settings.cv_link;
+                }
+
+                // Profile Image for About section
+                if (settings.profile_url) {
+                    const aboutImg = document.getElementById('aboutImgDisplay');
+                    if (aboutImg) aboutImg.src = settings.profile_url;
+                }
+
+                // Social Links
+                if (settings.github_url) {
+                    const ghLink = document.getElementById('githubLink');
+                    const aboutGh = document.getElementById('aboutGithubBtn');
+                    if (ghLink) ghLink.href = settings.github_url;
+                    if (aboutGh) aboutGh.href = settings.github_url;
+                }
+                if (settings.linkedin_url) {
+                    const liLink = document.getElementById('linkedinLink');
+                    const aboutLi = document.getElementById('aboutLinkedinBtn');
+                    if (liLink) liLink.href = settings.linkedin_url;
+                    if (aboutLi) aboutLi.href = settings.linkedin_url;
+                }
+                if (settings.email_address) {
+                    const mailLink = document.getElementById('emailLink');
+                    if (mailLink) mailLink.href = `mailto:${settings.email_address}`;
+                }
             }
 
-            if (data.profile_url) {
-                document.getElementById('profileImgDisplay').src = data.profile_url;
-                document.getElementById('aboutImgDisplay').src = data.profile_url;
-            }
-
-            if (data.github_url) {
-                document.getElementById('githubLink').href = data.github_url;
-                document.getElementById('aboutGithubBtn').href = data.github_url;
-            }
-            if (data.linkedin_url) {
-                document.getElementById('linkedinLink').href = data.linkedin_url;
-                document.getElementById('aboutLinkedinBtn').href = data.linkedin_url;
-            }
-            if (data.email_address) document.getElementById('emailLink').href = `mailto:${data.email_address}`;
-        }
-    }
-
-    /* 2. PROJECTS */
-    async function fetchProjects() {
-        const { data } = await supabaseClient.from('projects').select('*').order('id', { ascending: false });
-        const grid = document.getElementById('projectsGrid');
-        if (!data || data.length === 0) {
-            grid.innerHTML = `<p class="text-card-desc">No projects available.</p>`;
-            return;
-        }
-
-        grid.innerHTML = data.map(p => {
-            const year = p.created_at ? new Date(p.created_at).getFullYear() : '2024';
-            const tag = p.tag || 'GIS Analysis';
-            
-            return `
-            <div class="glass-card project-card-custom p-5 flex flex-col justify-between h-full border border-slate-700/50">
-                <div>
-                    <div class="w-full h-48 mb-5 overflow-hidden rounded-xl bg-slate-800/80 border border-slate-700/40">
-                        <img src="${p.image_url || 'https://via.placeholder.com/400x250'}" class="w-full h-full object-cover" alt="${p.title}">
-                    </div>
-                    <div class="flex items-center gap-2 mb-2 text-primary font-medium text-xs">
-                        <span class="material-symbols-outlined text-base">public</span>
-                        <span>${tag}</span>
-                    </div>
-                    <h3 class="font-bold text-xl text-card-title mb-2 leading-snug">${p.title}</h3>
-                    <p class="text-card-desc text-xs leading-relaxed line-clamp-3 mb-6">${p.description || ''}</p>
-                </div>
-                <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between">
-                    <div class="flex items-center gap-1.5 text-card-desc text-xs font-label-mono">
-                        <span class="material-symbols-outlined text-base">calendar_today</span>
-                        <span>${year}</span>
-                    </div>
-                    <a href="${p.link || '#'}" target="_blank" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-xs transition-colors">
-                        <span>View Project</span>
-                        <div class="w-7 h-7 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+            // 2. Fetch Projects
+            const { data: projects, error: projectsErr } = await supabaseClient.from('projects').select('*').order('id', { ascending: false });
+            const projectsGrid = document.getElementById('projectsGrid');
+            if (projectsGrid) {
+                if (projectsErr || !projects || projects.length === 0) {
+                    projectsGrid.innerHTML = `<p class="text-card-desc">No projects available.</p>`;
+                } else {
+                    projectsGrid.innerHTML = projects.map(p => {
+                        const year = p.created_at ? new Date(p.created_at).getFullYear() : '2026';
+                        const tag = p.tag || 'GIS Analysis';
+                        return `
+                        <div class="glass-card project-card-custom p-5 flex flex-col justify-between h-full border border-slate-700/50">
+                            <div>
+                                <div class="w-full h-48 mb-5 overflow-hidden rounded-xl bg-slate-800/80 border border-slate-700/40">
+                                    <img src="${p.image_url || 'https://via.placeholder.com/400x250'}" class="w-full h-full object-cover" alt="${p.title}">
+                                </div>
+                                <div class="flex items-center gap-2 mb-2 text-primary font-medium text-xs">
+                                    <span class="material-symbols-outlined text-base">public</span>
+                                    <span>${tag}</span>
+                                </div>
+                                <h3 class="font-bold text-xl text-card-title mb-2 leading-snug">${p.title}</h3>
+                                <p class="text-card-desc text-xs leading-relaxed line-clamp-3 mb-6">${p.description || ''}</p>
+                            </div>
+                            <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5 text-card-desc text-xs font-label-mono">
+                                    <span class="material-symbols-outlined text-base">calendar_today</span>
+                                    <span>${year}</span>
+                                </div>
+                                <a href="${p.link || '#'}" target="_blank" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-xs transition-colors">
+                                    <span>View Project</span>
+                                    <div class="w-7 h-7 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                    </a>
-                </div>
-            </div>
-        `}).join('');
-    }
+                    `;
+                    }).join('');
+                }
+            }
 
-    /* 3. SKILLS */
-    async function fetchSkills() {
-        const { data } = await supabaseClient.from('skills').select('*').order('id', { ascending: false });
-        const grid = document.getElementById('skillsGrid');
-        if (!data || data.length === 0) return;
+            // 3. Fetch Skills
+            const { data: skills, error: skillsErr } = await supabaseClient.from('skills').select('*').order('id', { ascending: false });
+            const skillsGrid = document.getElementById('skillsGrid');
+            if (skillsGrid && skills && skills.length > 0) {
+                const colors = ['border-primary text-primary bg-primary/10', 'border-secondary text-secondary bg-secondary/10', 'border-tertiary text-tertiary bg-tertiary/10', 'border-amber-500 text-amber-500 bg-amber-500/10'];
+                const icons = ['public', 'analytics', 'code', 'table_chart'];
 
-        grid.innerHTML = data.map((s, idx) => {
-            const colors = ['border-primary text-primary bg-primary/10', 'border-secondary text-secondary bg-secondary/10', 'border-tertiary text-tertiary bg-tertiary/10', 'border-amber-500 text-amber-500 bg-amber-500/10'];
-            const icons = ['public', 'analytics', 'code', 'table_chart'];
-            const currentColor = colors[idx % colors.length];
-            const currentIcon = icons[idx % icons.length];
+                skillsGrid.innerHTML = skills.map((s, idx) => {
+                    const currentColor = colors[idx % colors.length];
+                    const currentIcon = icons[idx % icons.length];
+                    return `
+                        <div class="glass-card geo-parallelogram p-6 text-center flex flex-col items-center justify-center border-b-4 ${currentColor.split(' ')[0]}">
+                            <div class="w-14 h-14 rounded-full ${currentColor.split(' ')[2]} flex items-center justify-center ${currentColor.split(' ')[1]} mb-3">
+                                <span class="material-symbols-outlined text-2xl">${currentIcon}</span>
+                            </div>
+                            <h3 class="font-bold text-base text-card-title">${s.category || 'Skill'}</h3>
+                            <p class="text-card-desc text-xs mt-1 font-label-mono">${s.name}</p>
+                            <div class="w-8 h-1 ${currentColor.split(' ')[1].replace('text-', 'bg-')} mt-3 rounded-full"></div>
+                        </div>
+                    `;
+                }).join('');
+            }
 
-            return `
-                <div class="glass-card geo-parallelogram p-6 text-center flex flex-col items-center justify-center border-b-4 ${currentColor.split(' ')[0]}">
-                    <div class="w-14 h-14 rounded-full ${currentColor.split(' ')[2]} flex items-center justify-center ${currentColor.split(' ')[1]} mb-3">
-                        <span class="material-symbols-outlined text-2xl">${currentIcon}</span>
+            // 4. Fetch Certifications
+            const { data: certs, error: certsErr } = await supabaseClient.from('certifications').select('*').order('id', { ascending: false });
+            const certsGrid = document.getElementById('certsGrid');
+            if (certsGrid && certs && certs.length > 0) {
+                certsGrid.innerHTML = certs.map(c => `
+                    <div class="glass-card geo-parallelogram p-5 flex flex-col justify-between border-r-4 border-r-primary h-full">
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-3">
+                                ${c.image_url ? `<img src="${c.image_url}" class="w-12 h-12 rounded-md object-cover border border-gray-500/20 shrink-0" alt="${c.title}">` : '<div class="w-12 h-12 rounded-md bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined">workspace_premium</span></div>'}
+                                <div class="w-8 h-8 hex-icon-box bg-primary/20 text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-card-title text-base leading-snug mb-1">${c.title}</h3>
+                            <p class="text-xs text-card-desc font-label-mono mb-2">${c.issuer || ''} ${c.date ? `• ${c.date}` : ''}</p>
+                        </div>
+                        ${c.cert_url ? `
+                        <div class="mt-4 pt-2 border-t border-gray-500/20">
+                            <a href="${c.cert_url}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1 font-label-mono font-semibold">
+                                View Credential <span class="material-symbols-outlined text-[12px]">arrow_forward</span>
+                            </a>
+                        </div>` : ''}
                     </div>
-                    <h3 class="font-bold text-base text-card-title">${s.category || 'Skill'}</h3>
-                    <p class="text-card-desc text-xs mt-1 font-label-mono">${s.name}</p>
-                    <div class="w-8 h-1 ${currentColor.split(' ')[1].replace('text-', 'bg-')} mt-3 rounded-full"></div>
-                </div>
-            `;
-        }).join('');
-    }
+                `).join('');
+            }
 
-    /* 4. CERTIFICATIONS */
-    async function fetchCertifications() {
-        const { data } = await supabaseClient.from('certifications').select('*').order('id', { ascending: false });
-        const grid = document.getElementById('certsGrid');
-        if (!data || data.length === 0) return;
-
-        grid.innerHTML = data.map(c => `
-            <div class="glass-card geo-parallelogram p-5 flex flex-col justify-between border-r-4 border-r-primary h-full">
-                <div>
-                    <div class="flex items-start justify-between gap-3 mb-3">
-                        ${c.image_url ? `<img src="${c.image_url}" class="w-12 h-12 rounded-md object-cover border border-gray-500/20 shrink-0" alt="${c.title}">` : '<div class="w-12 h-12 rounded-md bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined">workspace_premium</span></div>'}
-                        <div class="w-8 h-8 hex-icon-box bg-primary/20 text-primary shrink-0">
-                            <span class="material-symbols-outlined text-sm">check_circle</span>
+            // 5. Fetch Volunteer Work
+            const { data: volunteer, error: volErr } = await supabaseClient.from('volunteer_work').select('*').order('id', { ascending: false });
+            const volunteerContainer = document.getElementById('volunteerContainer');
+            if (volunteerContainer && volunteer && volunteer.length > 0) {
+                volunteerContainer.innerHTML = volunteer.map(v => `
+                    <div class="glass-card geo-parallelogram p-6 flex flex-col justify-between border-l-4 border-l-secondary">
+                        <div>
+                            <div class="flex justify-between items-start mb-2 gap-2">
+                                <h3 class="font-bold text-lg text-card-title leading-snug">${v.role}</h3>
+                                <span class="font-label-mono text-[10px] text-primary px-2.5 py-1 bg-primary/10 rounded-full border border-primary/20 font-semibold shrink-0">${v.period || 'Active'}</span>
+                            </div>
+                            <h4 class="text-xs font-semibold text-secondary mb-3">${v.organization || ''}</h4>
+                            <p class="text-xs text-card-desc leading-relaxed">${v.description || ''}</p>
                         </div>
                     </div>
-                    <h3 class="font-bold text-card-title text-base leading-snug mb-1">${c.title}</h3>
-                    <p class="text-xs text-card-desc font-label-mono mb-2">${c.issuer || ''} ${c.date ? `• ${c.date}` : ''}</p>
-                </div>
-                ${c.cert_url ? `
-                <div class="mt-4 pt-2 border-t border-gray-500/20">
-                    <a href="${c.cert_url}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1 font-label-mono font-semibold">
-                        View Credential <span class="material-symbols-outlined text-[12px]">arrow_forward</span>
-                    </a>
-                </div>` : ''}
-            </div>
-        `).join('');
-    }
+                `).join('');
+            }
 
-    /* 5. VOLUNTEER WORK */
-    async function fetchVolunteer() {
-        const { data } = await supabaseClient.from('volunteer_work').select('*').order('id', { ascending: false });
-        const container = document.getElementById('volunteerContainer');
-        if (!data || data.length === 0) return;
-
-        container.innerHTML = data.map(v => `
-            <div class="glass-card geo-parallelogram p-6 flex flex-col justify-between border-l-4 border-l-secondary">
-                <div>
-                    <div class="flex justify-between items-start mb-2 gap-2">
-                        <h3 class="font-bold text-lg text-card-title leading-snug">${v.role}</h3>
-                        <span class="font-label-mono text-[10px] text-primary px-2.5 py-1 bg-primary/10 rounded-full border border-primary/20 font-semibold shrink-0">${v.period || 'Active'}</span>
-                    </div>
-                    <h4 class="text-xs font-semibold text-secondary mb-3">${v.organization || ''}</h4>
-                    <p class="text-xs text-card-desc leading-relaxed">${v.description || ''}</p>
-                </div>
-            </div>
-        `).join('');
+        } catch (err) {
+            console.error('Error executing loadPortfolioData:', err);
+        }
     }
 </script>
 </body>
