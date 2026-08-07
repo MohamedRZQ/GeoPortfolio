@@ -289,6 +289,7 @@
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#about">About</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#projects">Projects</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#skills">Skills</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#education">Education</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#certs">Certifications</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#volunteer">Volunteer</a>
         </div>
@@ -414,9 +415,9 @@
             <div class="flex flex-col md:flex-row gap-8 items-stretch">
                 <!-- Left Column: Avatar Frame -->
                 <div class="w-full md:w-[260px] shrink-0">
-                    <div class="w-full h-full min-h-[260px] rounded-2xl overflow-hidden border border-gray-500/30 bg-gray-800/40">
-                        <img id="aboutImgDisplay" src="https://via.placeholder.com/300" class="w-full h-full object-cover" alt="Mohamed">
-                    </div>
+                <div class="w-full h-full min-h-[260px] rounded-2xl overflow-hidden border border-gray-500/30" style="background-color: #5775754f;">
+                <img id="aboutImgDisplay" src="https://via.placeholder.com/300" class="w-full h-full object-cover" alt="Mohamed">
+                </div>
                 </div>
 
                 <!-- Right Column: Content & Info Grid -->
@@ -512,6 +513,18 @@
             <!-- Skills injected here via JS -->
         </div>
     </section>
+
+<!-- DYNAMIC EDUCATION SECTION -->
+<section class="py-20 px-8 max-w-[1440px] mx-auto" id="education">
+    <div class="flex items-center gap-3 mb-12 justify-center">
+        <span class="material-symbols-outlined text-primary text-3xl">school</span>
+        <h2 class="text-3xl font-bold text-card-title">Education & Academic Journey</h2>
+    </div>
+    <!-- التعديل هنا: جعل الشاشة المتوسطة تعرض بطاقتين والكبيرة تعرض 3 بطاقات مع تقليل المسافات -->
+    <div id="educationGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-[1440px] mx-auto">
+        <!-- Education items injected here via JS -->
+    </div>
+</section>
 
     <!-- DYNAMIC CERTIFICATIONS SECTION -->
     <section class="py-20 px-8 max-w-[1440px] mx-auto" id="certs">
@@ -705,7 +718,32 @@
                 }).join('');
             }
 
-            // 4. Fetch Certifications
+            // 4. Fetch Education
+            const { data: edu, error: eduErr } = await supabaseClient.from('education').select('*').order('id', { ascending: false });
+            const educationGrid = document.getElementById('educationGrid');
+            if (educationGrid) {
+                if (eduErr || !edu || edu.length === 0) {
+                    educationGrid.innerHTML = `<p class="text-card-desc text-center col-span-2">No education entries available.</p>`;
+                } else {
+                    educationGrid.innerHTML = edu.map(e => `
+                        <div class="glass-card geo-parallelogram p-6 flex flex-col justify-between border-l-4 border-l-primary h-full">
+                            <div>
+                                <div class="flex justify-between items-start mb-2 gap-2">
+                                    <h3 class="font-bold text-xl text-card-title leading-snug">${e.degree}</h3>
+                                    <span class="font-label-mono text-[11px] text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20 font-semibold shrink-0">${e.period || 'Period'}</span>
+                                </div>
+                                <h4 class="text-sm font-semibold text-secondary mb-1 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-base">account_balance</span> ${e.institution}
+                                </h4>
+                                ${e.major ? `<p class="text-xs text-sky-400 font-label-mono mb-3">Major: ${e.major}</p>` : ''}
+                                <p class="text-xs text-card-desc leading-relaxed mt-2">${e.description || ''}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // 5. Fetch Certifications
             const { data: certs, error: certsErr } = await supabaseClient.from('certifications').select('*').order('id', { ascending: false });
             const certsGrid = document.getElementById('certsGrid');
             if (certsGrid && certs && certs.length > 0) {
@@ -731,7 +769,7 @@
                 `).join('');
             }
 
-            // 5. Fetch Volunteer Work
+            // 6. Fetch Volunteer Work
             const { data: volunteer, error: volErr } = await supabaseClient.from('volunteer_work').select('*').order('id', { ascending: false });
             const volunteerContainer = document.getElementById('volunteerContainer');
             if (volunteerContainer && volunteer && volunteer.length > 0) {
@@ -756,4 +794,3 @@
 </script>
 </body>
 </html>
-
