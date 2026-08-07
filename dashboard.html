@@ -72,6 +72,7 @@
       <li class="nav-item" onclick="switchTab('about', event)"><i class="fa-solid fa-address-card"></i> About & Info Grid</li>
       <li class="nav-item" onclick="switchTab('stats', event)"><i class="fa-solid fa-chart-simple"></i> Stats Banner</li>
       <li class="nav-item" onclick="switchTab('skills', event)"><i class="fa-solid fa-layer-group"></i> Technical Skills</li>
+      <li class="nav-item" onclick="switchTab('education', event)"><i class="fa-solid fa-graduation-cap"></i> Academic Education</li>
       <li class="nav-item" onclick="switchTab('projects', event)"><i class="fa-solid fa-folder"></i> Practical Projects</li>
       <li class="nav-item" onclick="switchTab('certs', event)"><i class="fa-solid fa-certificate"></i> Certifications & Upload</li>
       <li class="nav-item" onclick="switchTab('volunteer', event)"><i class="fa-solid fa-hand-holding-heart"></i> Volunteer Work</li>
@@ -144,6 +145,27 @@
       <table>
         <thead><tr><th>Category</th><th>Skill Name</th><th>Actions</th></tr></thead>
         <tbody id="skillsTableBody"></tbody>
+      </table>
+    </section>
+
+    <!-- ACADEMIC EDUCATION -->
+    <section id="sec-education" class="panel-section">
+      <h2 class="dash-section-title"><i class="fa-solid fa-graduation-cap"></i> Academic <span>Education</span></h2>
+      <input type="hidden" id="editEduId">
+      <div class="form-grid">
+        <div class="form-group full-width"><label>Degree / Certificate Title</label><input type="text" id="eduDegree" placeholder="Bachelor's Degree in Geography"></div>
+        <div class="form-group"><label>Institution / University</label><input type="text" id="eduInstitution" placeholder="Hassan II University"></div>
+        <div class="form-group"><label>Major / Specialization</label><input type="text" id="eduMajor" placeholder="GIS & Remote Sensing"></div>
+        <div class="form-group full-width"><label>Period / Academic Years</label><input type="text" id="eduPeriod" placeholder="2023 - 2026"></div>
+        <div class="form-group full-width"><label>Description / Honors (Optional)</label><textarea id="eduDesc" placeholder="Focused on spatial analysis, remote sensing, and database management..."></textarea></div>
+      </div>
+      <div class="btn-actions">
+        <button class="btn-save" id="btnSaveEdu" onclick="saveEducation()"><i class="fa-solid fa-plus"></i> Save Education Entry</button>
+        <button class="btn-cancel" id="btnCancelEdu" onclick="resetEduForm()">Cancel</button>
+      </div>
+      <table>
+        <thead><tr><th>Degree</th><th>Institution</th><th>Period</th><th>Actions</th></tr></thead>
+        <tbody id="educationTableBody"></tbody>
       </table>
     </section>
 
@@ -227,7 +249,7 @@
     const SUPABASE_KEY = 'sb_publishable_JsfgZNNi3-rS57fg8HwfeA_k604yWcv';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let projectsData = [], skillsData = [], certsData = [], volData = [];
+    let projectsData = [], skillsData = [], certsData = [], volData = [], eduData = [];
 
     function switchTab(tabId, e) {
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -240,6 +262,7 @@
       loadSettings();
       loadProjects();
       loadSkills();
+      loadEducation();
       loadCerts();
       loadVolunteer();
     };
@@ -305,6 +328,64 @@
 
       const { error } = await supabaseClient.from('site_settings').upsert({ id: 1, ...payload });
       if (error) alert(error.message); else alert('Settings saved successfully!');
+    }
+
+    /* ACADEMIC EDUCATION */
+    async function saveEducation() {
+      const editId = document.getElementById('editEduId').value;
+      const degree = document.getElementById('eduDegree').value;
+      const institution = document.getElementById('eduInstitution').value;
+      const major = document.getElementById('eduMajor').value;
+      const period = document.getElementById('eduPeriod').value;
+      const description = document.getElementById('eduDesc').value;
+
+      if (!degree || !institution) return alert('Degree Title and Institution are required');
+
+      const { error } = editId
+        ? await supabaseClient.from('education').update({ degree, institution, major, period, description }).eq('id', editId)
+        : await supabaseClient.from('education').insert([{ degree, institution, major, period, description }]);
+
+      if (error) alert(error.message); else { resetEduForm(); loadEducation(); }
+    }
+
+    async function loadEducation() {
+      const { data } = await supabaseClient.from('education').select('*').order('id', { ascending: false });
+      eduData = data || [];
+      document.getElementById('educationTableBody').innerHTML = eduData.map(e => `
+        <tr>
+          <td><b>${e.degree}</b></td>
+          <td>${e.institution || '-'}</td>
+          <td>${e.period || '-'}</td>
+          <td>
+            <button class="btn-edit" onclick="editEdu(${e.id})">Edit</button>
+            <button class="btn-delete" onclick="deleteRecord('education', ${e.id})">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function editEdu(id) {
+      const item = eduData.find(e => e.id == id);
+      if (!item) return;
+      document.getElementById('editEduId').value = item.id;
+      document.getElementById('eduDegree').value = item.degree || '';
+      document.getElementById('eduInstitution').value = item.institution || '';
+      document.getElementById('eduMajor').value = item.major || '';
+      document.getElementById('eduPeriod').value = item.period || '';
+      document.getElementById('eduDesc').value = item.description || '';
+      document.getElementById('btnSaveEdu').innerText = 'Update Education Entry';
+      document.getElementById('btnCancelEdu').style.display = 'inline-block';
+    }
+
+    function resetEduForm() {
+      document.getElementById('editEduId').value = '';
+      document.getElementById('eduDegree').value = '';
+      document.getElementById('eduInstitution').value = '';
+      document.getElementById('eduMajor').value = '';
+      document.getElementById('eduPeriod').value = '';
+      document.getElementById('eduDesc').value = '';
+      document.getElementById('btnSaveEdu').innerText = 'Save Education Entry';
+      document.getElementById('btnCancelEdu').style.display = 'none';
     }
 
     /* CERTIFICATIONS */
@@ -548,6 +629,7 @@
         else {
           if (table === 'projects') loadProjects();
           else if (table === 'skills') loadSkills();
+          else if (table === 'education') loadEducation();
           else if (table === 'certifications') loadCerts();
           else if (table === 'volunteer_work') loadVolunteer();
         }
