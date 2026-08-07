@@ -835,5 +835,24 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 </script>
+    <!-- مراقب آلي يمنع ترجمة جميع الأيقونات حتى لو جُلبت من Supabase -->
+    <script>
+        function protectIcons() {
+            const icons = document.querySelectorAll('.material-symbols-outlined, [class^="fa-"], [class*=" fa-"]');
+            icons.forEach(icon => {
+                if (!icon.hasAttribute('translate')) {
+                    icon.setAttribute('translate', 'no');
+                    icon.classList.add('notranslate');
+                }
+            });
+        }
+
+        // تشغيل المنع عند تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", protectIcons);
+
+        // مراقبة أي أيقونات جديدة تنزل من Supabase وتطبيق المنع عليها فوراً
+        const observer = new MutationObserver(protectIcons);
+        observer.observe(document.body, { childList: true, subtree: true });
+    </script>
 </body>
 </html>
