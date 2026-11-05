@@ -1,63 +1,676 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoVision - Login</title>
-    <!-- Supabase JS CDN -->
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>GeoVision - Dynamic Portfolio</title>
+    <!-- Tailwind CSS & Icons -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-900 text-white flex items-center justify-center min-h-screen">
 
-    <div class="bg-slate-800 p-8 rounded-xl shadow-lg w-96 border border-slate-700">
-        <h2 class="text-2xl font-bold mb-6 text-center text-emerald-400">Admin Dashboard Login</h2>
-        
-        <form id="loginForm" class="flex flex-col gap-4">
-            <input type="email" id="email" placeholder="Email" required class="p-3 rounded bg-slate-700 border border-slate-600 focus:outline-none focus:border-emerald-400">
-            <input type="password" id="password" placeholder="Password" required class="p-3 rounded bg-slate-700 border border-slate-600 focus:outline-none focus:border-emerald-400">
-            <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold py-3 rounded transition">Sign In</button>
-        </form>
-        
-        <p id="errorMsg" class="text-red-400 text-sm mt-3 text-center hidden"></p>
-    </div>
-
-    <script>
-        // مفاتيح الربط الخاصة بك
-        const SUPABASE_URL = "https://brydreaiwlbzbagsvezd.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_JsfgZNNi3-rS57fg8HwfeA_k604yWcv";
-        
-        // إنشاء عميل الاتصال بـ Supabase
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // التعامل مع عملية تسجيل الدخول
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('errorMsg');
-
-            errorMsg.classList.add('hidden');
-
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ 
-                email: email, 
-                password: password 
-            });
-
-            if (error) {
-                errorMsg.innerText = "Incorrect email or password!";
-                errorMsg.classList.remove('hidden');
-            } else {
-                // حفظ مفتاح الجلسة للتوافق مع حماية الداشبورد
-                sessionStorage.setItem('geovision_auth', 'true');
-
-                // عند نجاح الدخول ينقلك تلقائياً إلى الداشبورد
-                window.location.href = 'dashboard.html';
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "rgb(var(--p) / <alpha-value>)",
+                "secondary": "rgb(var(--s) / <alpha-value>)",
+                "tertiary": "rgb(var(--t) / <alpha-value>)",
+              },
+              fontFamily: {
+                "label-mono": ["JetBrains Mono"],
+                "body-md": ["Instrument Sans"],
+                "display-lg": ["Bricolage Grotesque"]
+              }
             }
-        });
+          }
+        }
+    </script>
+    <style>
+:root{--bg:#e9efee;--surf:#f6f9f8;--ink:#0b2b2e;--mute:#4a6769;--line:rgba(11,43,46,.15);--p:15 118 110;--s:3 105 161;--t:180 83 9}
+html.dark{--bg:#041f22;--surf:#0a2d31;--ink:#e8f3f1;--mute:#8fb0b1;--line:rgba(232,243,241,.14);--p:94 234 212;--s:125 211 252;--t:251 191 36}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif;overflow-x:hidden;transition:background-color .4s,color .4s}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:repeating-radial-gradient(circle at 88% 6%,transparent 0 26px,rgb(var(--p)/.13) 26px 27px),repeating-radial-gradient(circle at 4% 70%,transparent 0 34px,rgb(var(--p)/.09) 34px 35px);-webkit-mask-image:linear-gradient(#000 20%,transparent 92%);mask-image:linear-gradient(#000 20%,transparent 92%)}
+h1,h2,h3,.font-display-lg{font-family:'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.02em}
+::selection{background:rgb(var(--p)/.3)}
+a:focus-visible,button:focus-visible{outline:2px solid rgb(var(--p));outline-offset:3px}
+.text-card-title{color:var(--ink)}.text-card-desc{color:var(--mute)}
+.glass-card{background:var(--surf);border:1px solid var(--line);border-radius:8px}
+.glass-nav{background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+nav a.is-active{color:rgb(var(--p))!important;box-shadow:0 2px 0 rgb(var(--p))}
+.text-gradient{background:linear-gradient(90deg,rgb(var(--p)),rgb(var(--s)));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.glow-button{background:rgb(var(--p));color:var(--bg);transition:filter .2s,transform .2s}
+.glow-button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.glow-outline-button{border:1px solid var(--line);color:var(--ink);transition:border-color .2s,color .2s}
+.glow-outline-button:hover{border-color:rgb(var(--p));color:rgb(var(--p))}
+.pulse-dot{width:8px;height:8px;background:rgb(var(--p));border-radius:50%;display:inline-block;animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.4;transform:scale(1.25)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+#home>section:first-child .grid>div:first-child>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) backwards}
+#home>section:first-child .grid>div:first-child>*:nth-child(2){animation-delay:.1s}
+#home>section:first-child .grid>div:first-child>*:nth-child(3){animation-delay:.2s}
+#home>section:first-child .grid>div:first-child>*:nth-child(4){animation-delay:.3s}
+#home>section:first-child .grid>div:first-child>*:nth-child(5){animation-delay:.4s}
+.orbit-container{position:relative;width:100%;height:500px;display:flex;align-items:center;justify-content:center}
+.orbit-ring{position:absolute;border-radius:50%;border:1px dashed rgb(var(--p)/.4);pointer-events:none}
+.orbit-1{width:320px;height:320px;animation:spinOrbit 25s linear infinite}
+.orbit-2{width:460px;height:460px;animation:spinOrbitReverse 35s linear infinite}
+.satellite,.satellite-2{position:absolute;display:flex;align-items:center;gap:6px;white-space:nowrap;font:500 12px 'JetBrains Mono',monospace;background:var(--surf);border:1px solid var(--line);padding:4px 10px;border-radius:99px}
+.satellite{top:50%;right:-60px;transform:translateY(-50%);color:rgb(var(--p));animation:keepTextUpright 25s linear infinite}
+.satellite-2{bottom:20px;right:-20px;color:rgb(var(--s));animation:keepTextUprightReverse 35s linear infinite}
+@keyframes spinOrbit{to{transform:rotate(360deg)}}
+@keyframes spinOrbitReverse{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+@keyframes keepTextUpright{from{transform:translateY(-50%) rotate(0)}to{transform:translateY(-50%) rotate(-360deg)}}
+@keyframes keepTextUprightReverse{to{transform:rotate(360deg)}}
+.globe-wrapper{width:240px;height:240px;border-radius:50%;padding:5px;border:1px solid rgb(var(--p)/.5);position:relative;z-index:10;background:var(--surf)}
+.globe-container{width:100%;height:100%;border-radius:50%;overflow:hidden;position:relative;box-shadow:inset -22px -18px 44px rgba(0,0,0,.5)}
+.globe-container::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(90deg,transparent 0 19px,rgba(255,255,255,.2) 19px 20px),repeating-linear-gradient(0deg,transparent 0 19px,rgba(255,255,255,.2) 19px 20px)}
+.geo-parallelogram{position:relative;transition:border-color .25s}
+.geo-parallelogram::after{content:"";position:absolute;right:-1px;bottom:-1px;width:14px;height:14px;border:2px solid rgb(var(--p));border-top:0;border-left:0;border-bottom-right-radius:8px}
+.geo-parallelogram:hover{border-color:rgb(var(--p)/.55)}
+.hex-icon-box{clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);display:flex;align-items:center;justify-content:center}
+.project-card-custom{border-color:var(--line)!important;overflow:hidden}
+.project-card-custom .border-t{border-color:var(--line)!important}
+.project-card-custom .bg-slate-800\/80{background:rgb(var(--p)/.08)}
+.project-card-custom img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.project-card-custom:hover img{transform:scale(1.04)}
+footer{border-color:var(--line)!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+
+</style>
+</head>
+<body class="antialiased">
+
+<!-- Dynamic Top NavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav backdrop-blur-xl transition-colors duration-400">
+    <div class="flex justify-between items-center px-8 py-4 max-w-[1440px] mx-auto">
+        <div class="font-display-lg text-2xl text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
+            <span class="font-bold text-card-title">GeoVision</span>
+        </div>
+        
+        <div class="hidden md:flex items-center gap-8 font-body-md font-medium">
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#home">Home</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#about">About</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#projects">Projects</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#skills">Skills</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#education">Education</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#certs">Certifications</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#volunteer">Volunteer</a>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2.5 rounded-full border border-sky-600/30 hover:bg-white-500/10 transition-colors flex items-center justify-center text-primary cursor-pointer" title="Toggle Dark/Light Mode">
+                <span id="themeIcon" class="material-symbols-outlined text-xl">light_mode</span>
+            </button>
+
+            <a id="btnContact" href="#contact" class="hidden md:inline-flex items-center justify-center glow-button px-6 py-2 rounded-full font-body-md font-semibold text-sm cursor-pointer">
+                Let's Connect
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-[100px]" id="home">
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[85vh] flex items-center px-8 max-w-[1440px] mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full z-10">
+            <div class="flex flex-col gap-8">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 w-fit">
+                    <span class="pulse-dot"></span>
+                    <span class="font-label-mono text-xs text-primary font-bold">Geography Student | GIS, Spatial Analysis & Remote Sensing</span>
+                </div>
+                
+                <h1 id="heroTitleDisplay" class="font-display-lg text-4xl md:text-6xl font-bold text-card-title leading-tight">
+                    Spatial Data Science & <br/>
+                    <span class="text-gradient">GIS, Spatial Analysis & Remote Sensing</span>
+                </h1>
+                <p id="heroSubDisplay" class="font-body-lg text-card-desc max-w-xl text-lg">
+                    Geography student developing practical skills in GIS, spatial analysis, remote sensing, and interactive web mapping.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-2">
+                    <a href="#projects" class="glow-button px-8 py-4 rounded-full font-semibold flex items-center gap-2">
+                        View Projects <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                    <a id="cvLinkDisplay" href="#" target="_blank" class="glow-outline-button px-8 py-4 rounded-full font-semibold flex items-center gap-2">
+                        Download CV <span class="material-symbols-outlined">download</span>
+                    </a>
+                </div>
+
+                <!-- DYNAMIC GEOMETRIC STATS CARDS -->
+                <div class="grid grid-cols-3 gap-6 mt-6 pt-6 border-t border-gray-500/20">
+                    <div class="glass-card geo-parallelogram p-4 flex items-center gap-3 border-l-4 border-l-primary">
+                        <div class="w-10 h-10 hex-icon-box bg-primary/20 text-primary">
+                            <span class="material-symbols-outlined text-lg">folder_open</span>
+                        </div>
+                        <div>
+                            <div id="stat1Val" class="text-xl font-bold text-card-title">15+</div>
+                            <div id="stat1Lbl" class="font-label-mono text-[11px] text-card-desc">Completed Projects</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card geo-parallelogram p-4 flex items-center gap-3 border-l-4 border-l-secondary">
+                        <div class="w-10 h-10 hex-icon-box bg-secondary/20 text-secondary">
+                            <span class="material-symbols-outlined text-lg">code</span>
+                        </div>
+                        <div>
+                            <div id="stat2Val" class="text-xl font-bold text-card-title">4+</div>
+                            <div id="stat2Lbl" class="font-label-mono text-[11px] text-card-desc">Technical Skills</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card geo-parallelogram p-4 flex items-center gap-3 border-l-4 border-l-tertiary">
+                        <div class="w-10 h-10 hex-icon-box bg-tertiary/20 text-tertiary">
+                            <span class="material-symbols-outlined text-lg">verified</span>
+                        </div>
+                        <div>
+                            <div id="stat3Val" class="text-xl font-bold text-card-title">100%</div>
+                            <div id="stat3Lbl" class="font-label-mono text-[11px] text-card-desc">Credentials Earned</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GLOBE GRAPHIC WITH SATELLITES MATCHING IMAGE DESIGN -->
+            <div class="orbit-container hidden md:flex">
+                <div class="orbit-ring orbit-2">
+                    <div class="satellite-2">
+                        <span class="material-symbols-outlined text-base">satellite_alt</span> Sentinel-2
+                    </div>
+                </div>
+
+                <div class="orbit-ring orbit-1">
+                    <div class="satellite">
+                        <span class="material-symbols-outlined text-base">image</span> Landsat 9
+                    </div>
+                </div>
+
+                <div class="relative flex flex-col items-center">
+                    <!-- VECTOR GLOBE DESIGN -->
+                    <div class="globe-wrapper">
+                        <div class="globe-container">
+                            <svg viewBox="0 0 100 100" class="w-full h-full">
+                                <rect width="100" height="100" fill="#0c5a78" />
+                                <!-- Continents shape matching image_9a0d97.png -->
+                                <path d="M 15 35 Q 30 15 60 15 C 80 20 90 40 80 55 C 75 65 65 75 50 80 C 45 60 55 50 35 45 C 20 45 10 40 15 35 Z" fill="#7fc8a9" />
+                                <path d="M 50 78 Q 65 75 70 85 C 60 92 45 90 50 78 Z" fill="#7fc8a9" />
+                                <path d="M 25 22 C 35 15 45 18 35 28 Z" fill="#7fc8a9" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- GEOSPATIAL INTELLIGENCE FLOATING BADGE -->
+                    <div class="mt-6 glass-card px-5 py-3 flex items-center gap-3 backdrop-blur-xl border border-primary/30 z-20 rounded-lg">
+                        <span class="pulse-dot"></span>
+                        <div>
+                            <h4 class="font-bold text-sm text-gradient">GIS & Remote Sensing</h4>
+                            <p class="font-label-mono text-[11px] text-slate-400">Casablanca, Morocco · 33.57° N, 7.59° W</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <section class="py-20 px-8 max-w-[1440px] mx-auto" id="about">
+        <div class="flex items-center gap-4 mb-8">
+            <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-2xl">person</span>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-card-title">About Me</h2>
+            </div>
+        </div>
+
+        <div class="glass-card overflow-hidden rounded-3xl border border-gray-500/20 shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[480px]">
+                <div class="lg:col-span-4 bg-primary/10 p-8 flex flex-col items-center justify-center text-center relative border-b lg:border-b-0 lg:border-r border-gray-500/20">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+                    
+                    <div class="relative z-10 w-44 h-52 sm:w-52 sm:h-60 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-xl mb-6 bg-primary/10">
+                        <img id="aboutImgDisplay" src="https://via.placeholder.com/300" class="w-full h-full object-cover object-center" alt="Profile Photo">
+                    </div>
+
+                    <div class="relative z-10">
+                        <h3 id="aboutNameLeftDisplay" class="font-display-lg text-2xl font-bold text-gradient">Mohamed</h3>
+                        <p id="aboutRoleLeftDisplay" class="font-label-mono text-xs text-card-desc mt-1 font-semibold">GEOGRAPHY & GIS STUDENT</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 p-8 md:p-10 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-20 -bottom-20 opacity-5 dark:opacity-10 pointer-events-none">
+                        <span class="material-symbols-outlined text-[320px] text-card-title">public</span>
+                    </div>
+
+                    <div class="relative z-10">
+                        <h2 id="aboutGreetingDisplay" class="text-3xl sm:text-4xl font-bold text-card-title mb-4">Hello, I'm Mohamed</h2>
+
+                        <p id="aboutDescDisplay" class="text-card-desc text-sm sm:text-base leading-relaxed mb-8 max-w-2xl">
+                            I am passionate about geospatial analysis, remote sensing, and building innovative spatial solutions. I enjoy transforming raw data into maps, insights, and decisions that make a real impact.
+                        </p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-8 mb-8">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-xl">school</span>
+                                </div>
+                                <div>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">University</span>
+                                    <span id="aboutUniDisplay" class="font-bold text-sm sm:text-base text-card-title">Hassan II University</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-xl">map</span>
+                                </div>
+                                <div>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">Major</span>
+                                    <span id="aboutMajorDisplay" class="font-bold text-sm sm:text-base text-card-title">Geography & GIS</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-xl">public</span>
+                                </div>
+                                <div>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">Country</span>
+                                    <span id="aboutCountryDisplay" class="font-bold text-sm sm:text-base text-card-title">Morocco</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-xl">translate</span>
+                                </div>
+                                <div>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">Languages</span>
+                                    <span id="aboutLangDisplay" class="font-bold text-sm sm:text-base text-card-title">Arabic • English • French</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-500/20 relative z-10">
+                        <a id="aboutCvBtn" href="#" target="_blank" class="glow-button px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm inline-flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">download</span> Download CV
+                        </a>
+                        
+                        <a id="aboutGithubBtn" href="#" target="_blank" class="px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm border border-gray-500/30 text-card-title hover:bg-gray-500/10 transition-colors inline-flex items-center gap-2">
+                            <i class="fa-brands fa-github text-base"></i> GitHub
+                        </a>
+
+                        <a id="aboutLinkedinBtn" href="#" target="_blank" class="px-6 py-3 rounded-xl font-semibold text-xs sm:text-sm border border-gray-500/30 text-card-title hover:bg-gray-500/10 transition-colors inline-flex items-center gap-2">
+                            <i class="fa-brands fa-linkedin text-base"></i> LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DYNAMIC PROJECTS SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="projects">
+        <div class="flex justify-between items-end mb-10">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-2xl">view_carousel</span>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-card-title">Featured Projects</h2>
+                </div>
+            </div>
+            <a href="#projects" class="text-primary hover:underline font-label-mono text-sm font-semibold flex items-center gap-1.5">
+                View All Projects <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
+        </div>
+
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Projects injected here via JS -->
+        </div>
+
+        <div class="flex justify-center items-center gap-2 mt-8">
+            <span class="w-6 h-2 rounded-full bg-text-primary"></span>
+            <span class="w-2 h-2 rounded-full bg-text-primary/40"></span>
+            <span class="w-2 h-2 rounded-full bg-text-primary/40"></span>
+        </div>
+    </section>
+
+    <!-- DYNAMIC SKILLS SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="skills">
+        <div class="flex items-center gap-3 mb-12 ">
+            <span class="material-symbols-outlined text-primary text-3xl">bolt</span>
+            <h2 class="text-3xl font-bold text-card-title">Technical Skills & Expertise</h2>
+        </div>
+        <div id="skillsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <!-- Skills injected here via JS -->
+        </div>
+    </section>
+
+<!-- DYNAMIC EDUCATION SECTION -->
+<section class="py-20 px-8 max-w-[1440px] mx-auto" id="education">
+    <div class="flex items-center gap-3 mb-12 ">
+        <span class="material-symbols-outlined text-primary text-3xl">school</span>
+        <h2 class="text-3xl font-bold text-card-title">Education & Academic Journey</h2>
+    </div>
+    <!-- التعديل هنا: جعل الشاشة المتوسطة تعرض بطاقتين والكبيرة تعرض 3 بطاقات مع تقليل المسافات -->
+    <div id="educationGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-[1440px] mx-auto">
+        <!-- Education items injected here via JS -->
+    </div>
+</section>
+
+    <!-- DYNAMIC CERTIFICATIONS SECTION -->
+    <section class="py-20 px-8 max-w-[1440px] mx-auto" id="certs">
+        <div class="flex items-center gap-3 mb-12">
+            <span class="material-symbols-outlined text-primary text-3xl">verified</span>
+            <h2 class="text-3xl font-bold text-card-title">Certifications & Credentials</h2>
+        </div>
+        <div id="certsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1440px] mx-auto">
+            <!-- Certifications injected here via JS -->
+        </div>
+    </section>
+
+    <!-- DYNAMIC VOLUNTEER WORK SECTION -->
+<!-- DYNAMIC VOLUNTEER WORK SECTION -->
+<section class="py-20 px-8 max-w-[1440px] mx-auto" id="volunteer">
+    <div class="flex items-center gap-3 mb-12">
+        <span class="material-symbols-outlined text-primary text-3xl">volunteer_activism</span>
+        <h2 class="text-3xl font-bold text-card-title">Volunteer & Community Work</h2>
+    </div>
+    <div id="volunteerContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1440px] mx-auto">
+        <!-- Volunteer items injected here via JS -->
+    </div>
+</section>
+</main>
+
+<!-- FOOTER WITH DYNAMIC CONTACT LINKS -->
+<footer class="w-full border-t border-gray-500/20 py-8 mt-20" id="contact">
+    <div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-[1440px] mx-auto gap-4">
+        <div class="font-display-lg text-2xl text-primary font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined">public</span> GeoVision
+        </div>
+        <div class="font-label-mono text-xs text-card-desc">
+            © 2026 Mohamed Rezouq — GeoVision. All rights reserved.
+        </div>
+        <div class="flex items-center gap-6 font-label-mono text-sm">
+            <a id="githubLink" href="#" target="_blank" class="text-card-desc hover:text-secondary transition-colors"><i class="fa-brands fa-github"></i> GitHub</a>
+            <a id="linkedinLink" href="#" target="_blank" class="text-card-desc hover:text-secondary transition-colors"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            <a id="emailLink" href="#" class="text-card-desc hover:text-secondary transition-colors"><i class="fa-solid fa-envelope"></i> Email</a>
+        </div>
+    </div>
+</footer>
+
+<!-- SUPABASE INTEGRATION & THEME SCRIPT -->
+<script>
+    const SUPABASE_URL = 'https://brydreaiwlbzbagsvezd.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_JsfgZNNi3-rS57fg8HwfeA_k604yWcv';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+    
+    if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        icon.innerText = 'dark_mode';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.classList.add('dark');
+        icon.innerText = 'light_mode';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// تطبيق الوضع الفاتح افتراضياً عند فتح الصفحة
+window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+
+    // إذا اختار الزائر المظلم سابقاً نحفظ خياره، غير ذلك يفتح دائماً على الفاتح
+    if (savedTheme === 'dark') {
+        html.classList.add('dark');
+        if (icon) icon.innerText = 'light_mode';
+    } else {
+        html.classList.remove('dark');
+        if (icon) icon.innerText = 'dark_mode';
+    }
+
+    loadPortfolioData();
+});
+
+    /* MASTER FUNCTION TO LOAD ALL PORTFOLIO DATA FROM SUPABASE */
+    async function loadPortfolioData() {
+        try {
+            // 1. Fetch Site Settings & About Info
+            const { data: settings, error: settingsErr } = await supabaseClient.from('site_settings').select('*').single();
+            if (settingsErr) console.warn('Settings fetch warning:', settingsErr);
+            
+            if (settings) {
+                if (settings.hero_title) document.getElementById('heroTitleDisplay').innerHTML = settings.hero_title;
+                if (settings.hero_sub) document.getElementById('heroSubDisplay').innerText = settings.hero_sub;
+                
+                // About & Hero Section Binds
+                if (settings.about_greeting) document.getElementById('aboutGreetingDisplay').innerText = settings.about_greeting;
+                if (settings.about_uni) document.getElementById('aboutUniDisplay').innerText = settings.about_uni;
+                if (settings.about_major) document.getElementById('aboutMajorDisplay').innerText = settings.about_major;
+                if (settings.about_country) document.getElementById('aboutCountryDisplay').innerText = settings.about_country;
+                if (settings.about_languages) document.getElementById('aboutLangDisplay').innerText = settings.about_languages;
+                if (settings.about_desc) document.getElementById('aboutDescDisplay').innerText = settings.about_desc;
+
+                // Stats Cards
+                if (settings.stat1_val) document.getElementById('stat1Val').innerText = settings.stat1_val;
+                if (settings.stat1_lbl) document.getElementById('stat1Lbl').innerText = settings.stat1_lbl;
+                if (settings.stat2_val) document.getElementById('stat2Val').innerText = settings.stat2_val;
+                if (settings.stat2_lbl) document.getElementById('stat2Lbl').innerText = settings.stat2_lbl;
+                if (settings.stat3_val) document.getElementById('stat3Val').innerText = settings.stat3_val;
+                if (settings.stat3_lbl) document.getElementById('stat3Lbl').innerText = settings.stat3_lbl;
+
+                // Download CV Links
+                if (settings.cv_link) {
+                    const cvDisplay = document.getElementById('cvLinkDisplay');
+                    const aboutCv = document.getElementById('aboutCvBtn');
+                    if (cvDisplay) cvDisplay.href = settings.cv_link;
+                    if (aboutCv) aboutCv.href = settings.cv_link;
+                }
+
+                // Profile Image for About section
+                if (settings.profile_url) {
+                    const aboutImg = document.getElementById('aboutImgDisplay');
+                    if (aboutImg) aboutImg.src = settings.profile_url;
+                }
+
+                // Social Links
+                if (settings.github_url) {
+                    const ghLink = document.getElementById('githubLink');
+                    const aboutGh = document.getElementById('aboutGithubBtn');
+                    if (ghLink) ghLink.href = settings.github_url;
+                    if (aboutGh) aboutGh.href = settings.github_url;
+                }
+                if (settings.linkedin_url) {
+                    const liLink = document.getElementById('linkedinLink');
+                    const aboutLi = document.getElementById('aboutLinkedinBtn');
+                    if (liLink) liLink.href = settings.linkedin_url;
+                    if (aboutLi) aboutLi.href = settings.linkedin_url;
+                }
+                if (settings.email_address) {
+                    const mailLink = document.getElementById('emailLink');
+                    if (mailLink) mailLink.href = `mailto:${settings.email_address}`;
+                }
+            }
+
+            // 2. Fetch Projects
+            const { data: projects, error: projectsErr } = await supabaseClient.from('projects').select('*').order('id', { ascending: false });
+            const projectsGrid = document.getElementById('projectsGrid');
+            if (projectsGrid) {
+                if (projectsErr || !projects || projects.length === 0) {
+                    projectsGrid.innerHTML = `<p class="text-card-desc">No projects available.</p>`;
+                } else {
+                    projectsGrid.innerHTML = projects.map(p => {
+                        const year = p.created_at ? new Date(p.created_at).getFullYear() : '2026';
+                        const tag = p.tag || 'GIS Analysis';
+                        return `
+                        <div class="glass-card project-card-custom p-5 flex flex-col justify-between h-full border border-slate-700/50">
+                            <div>
+                                <div class="w-full h-48 mb-5 overflow-hidden rounded-xl bg-slate-800/80 border border-slate-700/40">
+                                    <img src="${p.image_url || 'https://via.placeholder.com/400x250'}" class="w-full h-full object-cover" alt="${p.title}">
+                                </div>
+                                <div class="flex items-center gap-2 mb-2 text-primary font-medium text-xs">
+                                    <span class="material-symbols-outlined text-base">public</span>
+                                    <span>${tag}</span>
+                                </div>
+                                <h3 class="font-bold text-xl text-card-title mb-2 leading-snug">${p.title}</h3>
+                                <p class="text-card-desc text-xs leading-relaxed line-clamp-3 mb-6">${p.description || ''}</p>
+                            </div>
+                            <div class="pt-4 border-t border-slate-700/40 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5 text-card-desc text-xs font-label-mono">
+                                    <span class="material-symbols-outlined text-base">calendar_today</span>
+                                    <span>${year}</span>
+                                </div>
+                                <a href="${p.link || '#'}" target="_blank" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-xs transition-colors">
+                                    <span>View Project</span>
+                                    <div class="w-7 h-7 rounded-lg border border-primary/30 bg-primary/10 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    }).join('');
+                }
+            }
+
+            // 3. Fetch Skills
+            const { data: skills, error: skillsErr } = await supabaseClient.from('skills').select('*').order('id', { ascending: false });
+            const skillsGrid = document.getElementById('skillsGrid');
+            if (skillsGrid && skills && skills.length > 0) {
+                const colors = ['border-primary text-primary bg-primary/10', 'border-secondary text-secondary bg-secondary/10', 'border-tertiary text-tertiary bg-tertiary/10', 'border-amber-500 text-amber-500 bg-amber-500/10'];
+                const icons = ['public', 'analytics', 'code', 'table_chart'];
+
+                skillsGrid.innerHTML = skills.map((s, idx) => {
+                    const currentColor = colors[idx % colors.length];
+                    const currentIcon = icons[idx % icons.length];
+                    return `
+                        <div class="glass-card geo-parallelogram p-6 text-center flex flex-col items-center justify-center border-b-4 ${currentColor.split(' ')[0]}">
+                            <div class="w-14 h-14 rounded-full ${currentColor.split(' ')[2]} flex items-center justify-center ${currentColor.split(' ')[1]} mb-3">
+                                <span class="material-symbols-outlined text-2xl">${currentIcon}</span>
+                            </div>
+                            <h3 class="font-bold text-base text-card-title">${s.category || 'Skill'}</h3>
+                            <p class="text-card-desc text-xs mt-1 font-label-mono">${s.name}</p>
+                            <div class="w-8 h-1 ${currentColor.split(' ')[1].replace('text-', 'bg-')} mt-3 rounded-full"></div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 4. Fetch Education
+            const { data: edu, error: eduErr } = await supabaseClient.from('education').select('*').order('id', { ascending: false });
+            const educationGrid = document.getElementById('educationGrid');
+            if (educationGrid) {
+                if (eduErr || !edu || edu.length === 0) {
+                    educationGrid.innerHTML = `<p class="text-card-desc text-center col-span-2">No education entries available.</p>`;
+                } else {
+                    educationGrid.innerHTML = edu.map(e => `
+                        <div class="glass-card geo-parallelogram p-6 flex flex-col justify-between border-l-4 border-l-primary h-full">
+                            <div>
+                                <div class="flex justify-between items-start mb-2 gap-2">
+                                    <h3 class="font-bold text-xl text-card-title leading-snug">${e.degree}</h3>
+                                    <span class="font-label-mono text-[11px] text-primary px-3 py-1 bg-primary/10 rounded-full border border-primary/20 font-semibold shrink-0">${e.period || 'Period'}</span>
+                                </div>
+                                <h4 class="text-sm font-semibold text-secondary mb-1 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-base">account_balance</span> ${e.institution}
+                                </h4>
+                                ${e.major ? `<p class="text-xs text-secondary font-label-mono mb-3">Major: ${e.major}</p>` : ''}
+                                <p class="text-xs text-card-desc leading-relaxed mt-2">${e.description || ''}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // 5. Fetch Certifications
+            const { data: certs, error: certsErr } = await supabaseClient.from('certifications').select('*').order('id', { ascending: false });
+            const certsGrid = document.getElementById('certsGrid');
+            if (certsGrid && certs && certs.length > 0) {
+                certsGrid.innerHTML = certs.map(c => `
+                    <div class="glass-card geo-parallelogram p-5 flex flex-col justify-between border-r-4 border-r-primary h-full">
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-3">
+                                ${c.image_url ? `<img src="${c.image_url}" class="w-12 h-12 rounded-md object-cover border border-gray-500/20 shrink-0" alt="${c.title}">` : '<div class="w-12 h-12 rounded-md bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shrink-0"><span class="material-symbols-outlined">workspace_premium</span></div>'}
+                                <div class="w-8 h-8 hex-icon-box bg-primary/20 text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-card-title text-base leading-snug mb-1">${c.title}</h3>
+                            <p class="text-xs text-card-desc font-label-mono mb-2">${c.issuer || ''} ${c.date ? `• ${c.date}` : ''}</p>
+                        </div>
+                        ${c.cert_url ? `
+                        <div class="mt-4 pt-2 border-t border-gray-500/20">
+                            <a href="${c.cert_url}" target="_blank" class="text-xs text-primary hover:underline inline-flex items-center gap-1 font-label-mono font-semibold">
+                                View Credential <span class="material-symbols-outlined text-[12px]">arrow_forward</span>
+                            </a>
+                        </div>` : ''}
+                    </div>
+                `).join('');
+            }
+
+            // 6. Fetch Volunteer Work
+            const { data: volunteer, error: volErr } = await supabaseClient.from('volunteer_work').select('*').order('id', { ascending: false });
+            const volunteerContainer = document.getElementById('volunteerContainer');
+            if (volunteerContainer && volunteer && volunteer.length > 0) {
+                volunteerContainer.innerHTML = volunteer.map(v => `
+                    <div class="glass-card geo-parallelogram p-6 flex flex-col justify-between border-l-4 border-l-secondary">
+                        <div>
+                            <div class="flex justify-between items-start mb-2 gap-2">
+                                <h3 class="font-bold text-lg text-card-title leading-snug">${v.role}</h3>
+                                <span class="font-label-mono text-[10px] text-primary px-2.5 py-1 bg-primary/10 rounded-full border border-primary/20 font-semibold shrink-0">${v.period || 'Active'}</span>
+                            </div>
+                            <h4 class="text-xs font-semibold text-secondary mb-3">${v.organization || ''}</h4>
+                            <p class="text-xs text-card-desc leading-relaxed">${v.description || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+        } catch (err) {
+            console.error('Error executing loadPortfolioData:', err);
+        }
+    }
+</script>
+    <!-- مراقب آلي يمنع ترجمة جميع الأيقونات حتى لو جُلبت من Supabase -->
+    <script>
+        function protectIcons() {
+            const icons = document.querySelectorAll('.material-symbols-outlined, [class^="fa-"], [class*=" fa-"]');
+            icons.forEach(icon => {
+                if (!icon.hasAttribute('translate')) {
+                    icon.setAttribute('translate', 'no');
+                    icon.classList.add('notranslate');
+                }
+            });
+        }
+
+        // تشغيل المنع عند تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", protectIcons);
+
+        // مراقبة أي أيقونات جديدة تنزل من Supabase وتطبيق المنع عليها فوراً
+        const observer = new MutationObserver(protectIcons);
+        observer.observe(document.body, { childList: true, subtree: true });
     </script>
 
+<script>
+(function(){
+  const links=[...document.querySelectorAll('nav a[href^="#"]')].filter(a=>a.id!=='btnContact');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('is-active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-40% 0px -55% 0px'});
+  links.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));if(t)io.observe(t)});
+})();
+</script>
 </body>
 </html>
