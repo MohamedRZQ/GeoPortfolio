@@ -6,7 +6,7 @@
     <title>GeoVision - Dynamic Portfolio</title>
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,262 +17,72 @@
           theme: {
             extend: {
               colors: {
-                "primary": "#0284c7",
-                "secondary": "#3b82f6",
-                "tertiary": "#2563eb",
+                "primary": "rgb(var(--p) / <alpha-value>)",
+                "secondary": "rgb(var(--s) / <alpha-value>)",
+                "tertiary": "rgb(var(--t) / <alpha-value>)",
               },
               fontFamily: {
                 "label-mono": ["JetBrains Mono"],
-                "body-md": ["Inter"],
-                "display-lg": ["Space Grotesk"]
+                "body-md": ["Instrument Sans"],
+                "display-lg": ["Bricolage Grotesque"]
               }
             }
           }
         }
     </script>
     <style>
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
+:root{--bg:#e9efee;--surf:#f6f9f8;--ink:#0b2b2e;--mute:#4a6769;--line:rgba(11,43,46,.15);--p:15 118 110;--s:3 105 161;--t:180 83 9}
+html.dark{--bg:#041f22;--surf:#0a2d31;--ink:#e8f3f1;--mute:#8fb0b1;--line:rgba(232,243,241,.14);--p:94 234 212;--s:125 211 252;--t:251 191 36}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif;overflow-x:hidden;transition:background-color .4s,color .4s}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:repeating-radial-gradient(circle at 88% 6%,transparent 0 26px,rgb(var(--p)/.13) 26px 27px),repeating-radial-gradient(circle at 4% 70%,transparent 0 34px,rgb(var(--p)/.09) 34px 35px);-webkit-mask-image:linear-gradient(#000 20%,transparent 92%);mask-image:linear-gradient(#000 20%,transparent 92%)}
+h1,h2,h3,.font-display-lg{font-family:'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:-.02em}
+::selection{background:rgb(var(--p)/.3)}
+a:focus-visible,button:focus-visible{outline:2px solid rgb(var(--p));outline-offset:3px}
+.text-card-title{color:var(--ink)}.text-card-desc{color:var(--mute)}
+.glass-card{background:var(--surf);border:1px solid var(--line);border-radius:8px}
+.glass-nav{background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
+nav a.is-active{color:rgb(var(--p))!important;box-shadow:0 2px 0 rgb(var(--p))}
+.text-gradient{background:linear-gradient(90deg,rgb(var(--p)),rgb(var(--s)));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.glow-button{background:rgb(var(--p));color:var(--bg);transition:filter .2s,transform .2s}
+.glow-button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.glow-outline-button{border:1px solid var(--line);color:var(--ink);transition:border-color .2s,color .2s}
+.glow-outline-button:hover{border-color:rgb(var(--p));color:rgb(var(--p))}
+.pulse-dot{width:8px;height:8px;background:rgb(var(--p));border-radius:50%;display:inline-block;animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.4;transform:scale(1.25)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+#home>section:first-child .grid>div:first-child>*{animation:rise .7s cubic-bezier(.2,.7,.2,1) backwards}
+#home>section:first-child .grid>div:first-child>*:nth-child(2){animation-delay:.1s}
+#home>section:first-child .grid>div:first-child>*:nth-child(3){animation-delay:.2s}
+#home>section:first-child .grid>div:first-child>*:nth-child(4){animation-delay:.3s}
+#home>section:first-child .grid>div:first-child>*:nth-child(5){animation-delay:.4s}
+.orbit-container{position:relative;width:100%;height:500px;display:flex;align-items:center;justify-content:center}
+.orbit-ring{position:absolute;border-radius:50%;border:1px dashed rgb(var(--p)/.4);pointer-events:none}
+.orbit-1{width:320px;height:320px;animation:spinOrbit 25s linear infinite}
+.orbit-2{width:460px;height:460px;animation:spinOrbitReverse 35s linear infinite}
+.satellite,.satellite-2{position:absolute;display:flex;align-items:center;gap:6px;white-space:nowrap;font:500 12px 'JetBrains Mono',monospace;background:var(--surf);border:1px solid var(--line);padding:4px 10px;border-radius:99px}
+.satellite{top:50%;right:-60px;transform:translateY(-50%);color:rgb(var(--p));animation:keepTextUpright 25s linear infinite}
+.satellite-2{bottom:20px;right:-20px;color:rgb(var(--s));animation:keepTextUprightReverse 35s linear infinite}
+@keyframes spinOrbit{to{transform:rotate(360deg)}}
+@keyframes spinOrbitReverse{from{transform:rotate(360deg)}to{transform:rotate(0)}}
+@keyframes keepTextUpright{from{transform:translateY(-50%) rotate(0)}to{transform:translateY(-50%) rotate(-360deg)}}
+@keyframes keepTextUprightReverse{to{transform:rotate(360deg)}}
+.globe-wrapper{width:240px;height:240px;border-radius:50%;padding:5px;border:1px solid rgb(var(--p)/.5);position:relative;z-index:10;background:var(--surf)}
+.globe-container{width:100%;height:100%;border-radius:50%;overflow:hidden;position:relative;box-shadow:inset -22px -18px 44px rgba(0,0,0,.5)}
+.globe-container::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(90deg,transparent 0 19px,rgba(255,255,255,.2) 19px 20px),repeating-linear-gradient(0deg,transparent 0 19px,rgba(255,255,255,.2) 19px 20px)}
+.geo-parallelogram{position:relative;transition:border-color .25s}
+.geo-parallelogram::after{content:"";position:absolute;right:-1px;bottom:-1px;width:14px;height:14px;border:2px solid rgb(var(--p));border-top:0;border-left:0;border-bottom-right-radius:8px}
+.geo-parallelogram:hover{border-color:rgb(var(--p)/.55)}
+.hex-icon-box{clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);display:flex;align-items:center;justify-content:center}
+.project-card-custom{border-color:var(--line)!important;overflow:hidden}
+.project-card-custom .border-t{border-color:var(--line)!important}
+.project-card-custom .bg-slate-800\/80{background:rgb(var(--p)/.08)}
+.project-card-custom img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.project-card-custom:hover img{transform:scale(1.04)}
+footer{border-color:var(--line)!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
 
-        /* Improved & Lighter Dark Mode Styles */
-        html.dark body {
-            background-color: #023335;
-            color: #f1f5f9;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-        }
-
-        html.dark .glass-card {
-            background:  rgba(1, 44, 46, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
-        }
-
-        html.dark .glass-nav {
-            background: rgba(1, 44, 46, 0.85);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        html.dark .text-card-title { color: #ffffff; }
-        html.dark .text-card-desc { color: #94a3b8; }
-
-        /* Light Mode Styles */
-        html:not(.dark) body {
-            background-color: #e5eeee;
-            color: #0f172a;
-            background-image: 
-                linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
-        }
-
-        html:not(.dark) .glass-card {
-            background: rgba(216, 247, 237, 0.178);
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.05);
-        }
-
-        html:not(.dark) .glass-nav {
-            background: rgba(255, 255, 255, 0.85);
-            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-        }
-
-        body {
-            overflow-x: hidden;
-            background-size: 80px 80px;
-            background-position: center center;
-            background-attachment: fixed;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-
-        .text-gradient {
-            background: linear-gradient(90deg, #10b981 0%, #0284c7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .glow-button {
-            background-color: #1091b9;
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(16, 151, 185, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .glow-button:hover {
-            box-shadow: 0 0 30px rgba(16, 151, 185, 0.3);
-            transform: scale(1.03);
-        }
-
-        .glow-outline-button {
-            border: 1px solid rgba(16, 151, 185, 0.3);
-            color: #1091b9;
-            transition: all 0.3s ease;
-        }
-
-        .glow-outline-button:hover {
-            box-shadow: 0 0 15px rgba(16, 151, 185, 0.3);
-            border-color: #1091b9;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #1091b9;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px #1091b9;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        /* --- SATELLITE ORBIT DESIGN MATCHING EXACT SPECIFICATION --- */
-        .orbit-container {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .orbit-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px dashed rgba(16, 151, 185, 0.3);
-            pointer-events: none;
-        }
-
-        .orbit-1 {
-            width: 320px;
-            height: 320px;
-            animation: spinOrbit 25s linear infinite;
-        }
-
-        .orbit-2 {
-            width: 460px;
-            height: 460px;
-            border-color: rgba(16, 151, 185, 0.3);
-            animation: spinOrbitReverse 35s linear infinite;
-        }
-
-        .satellite {
-            position: absolute;
-            top: 50%;
-            right: -60px;
-            transform: translateY(-50%);
-            background: transparent;
-            color: #10b981;
-            font-size: 13px;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-            animation: keepTextUpright 25s linear infinite;
-        }
-
-        .satellite-2 {
-            position: absolute;
-            bottom: 20px;
-            right: -20px;
-            background: transparent;
-            color: #0284c7;
-            font-size: 13px;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            text-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
-            animation: keepTextUprightReverse 35s linear infinite;
-        }
-
-        @keyframes spinOrbit {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes spinOrbitReverse {
-            from { transform: rotate(360deg); }
-            to { transform: rotate(-360deg); }
-        }
-
-        @keyframes keepTextUpright {
-            from { transform: translateY(-50%) rotate(0deg); }
-            to { transform: translateY(-50%) rotate(-360deg); }
-        }
-
-        @keyframes keepTextUprightReverse {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* GLOBE STYLES */
-        .globe-wrapper {
-            width: 240px;
-            height: 240px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #10b981, #0284c7);
-            padding: 6px;
-            box-shadow: 0 0 45px rgba(16, 185, 129, 0.4);
-            position: relative;
-            z-index: 10;
-        }
-
-        .globe-container {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: #0284c7;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        /* --- GEOMETRIC PARALLELOGRAM & CUTOUT SHAPES --- */
-        .geo-parallelogram {
-            transform: skewX(-12deg);
-            border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .geo-parallelogram > * {
-            transform: skewX(12deg);
-        }
-
-        .geo-parallelogram:hover {
-            transform: skewX(-12deg) translateY(-5px);
-            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.2);
-        }
-
-        .hex-icon-box {
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- STYLED PROJECT CARDS --- */
-        .project-card-custom {
-            border-radius: 16px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .project-card-custom:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px -5px rgba(0, 38, 53, 0.4);
-        }
-    </style>
+</style>
 </head>
 <body class="antialiased">
 
@@ -281,11 +91,11 @@
     <div class="flex justify-between items-center px-8 py-4 max-w-[1440px] mx-auto">
         <div class="font-display-lg text-2xl text-primary flex items-center gap-2">
             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
-            <span class="font-bold text-sky-600">GeoVision</span>
+            <span class="font-bold text-card-title">GeoVision</span>
         </div>
         
         <div class="hidden md:flex items-center gap-8 font-body-md font-medium">
-            <a class="text-primary border-b-2 border-primary pb-1" href="#home">Home</a>
+            <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#home">Home</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#about">About</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#projects">Projects</a>
             <a class="text-card-desc hover:text-primary transition-colors pb-1" href="#skills">Skills</a>
@@ -313,7 +123,7 @@
             <div class="flex flex-col gap-8">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 w-fit">
                     <span class="pulse-dot"></span>
-                    <span class="font-label-mono text-xs text-primary font-bold uppercase tracking-wider">Geography Student | GIS, Spatial Analysis & Remote Sensing</span>
+                    <span class="font-label-mono text-xs text-primary font-bold">Geography Student | GIS, Spatial Analysis & Remote Sensing</span>
                 </div>
                 
                 <h1 id="heroTitleDisplay" class="font-display-lg text-4xl md:text-6xl font-bold text-card-title leading-tight">
@@ -385,11 +195,11 @@
                     <div class="globe-wrapper">
                         <div class="globe-container">
                             <svg viewBox="0 0 100 100" class="w-full h-full">
-                                <rect width="100" height="100" fill="#0284c7" />
+                                <rect width="100" height="100" fill="#0c5a78" />
                                 <!-- Continents shape matching image_9a0d97.png -->
-                                <path d="M 15 35 Q 30 15 60 15 C 80 20 90 40 80 55 C 75 65 65 75 50 80 C 45 60 55 50 35 45 C 20 45 10 40 15 35 Z" fill="#10b981" />
-                                <path d="M 50 78 Q 65 75 70 85 C 60 92 45 90 50 78 Z" fill="#10b981" />
-                                <path d="M 25 22 C 35 15 45 18 35 28 Z" fill="#10b981" />
+                                <path d="M 15 35 Q 30 15 60 15 C 80 20 90 40 80 55 C 75 65 65 75 50 80 C 45 60 55 50 35 45 C 20 45 10 40 15 35 Z" fill="#7fc8a9" />
+                                <path d="M 50 78 Q 65 75 70 85 C 60 92 45 90 50 78 Z" fill="#7fc8a9" />
+                                <path d="M 25 22 C 35 15 45 18 35 28 Z" fill="#7fc8a9" />
                             </svg>
                         </div>
                     </div>
@@ -399,7 +209,7 @@
                         <span class="pulse-dot"></span>
                         <div>
                             <h4 class="font-bold text-sm text-gradient">GIS & Remote Sensing</h4>
-                            <p class="font-label-mono text-[11px] text-slate-400">Casablanca, Morocco</p>
+                            <p class="font-label-mono text-[11px] text-slate-400">Casablanca, Morocco · 33.57° N, 7.59° W</p>
                         </div>
                     </div>
                 </div>
@@ -419,7 +229,7 @@
 
         <div class="glass-card overflow-hidden rounded-3xl border border-gray-500/20 shadow-2xl">
             <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[480px]">
-                <div class="lg:col-span-4 bg-primary/15 dark:bg-[#012527] p-8 flex flex-col items-center justify-center text-center relative border-b lg:border-b-0 lg:border-r border-gray-500/20">
+                <div class="lg:col-span-4 bg-primary/10 p-8 flex flex-col items-center justify-center text-center relative border-b lg:border-b-0 lg:border-r border-gray-500/20">
                     <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
                     
                     <div class="relative z-10 w-44 h-52 sm:w-52 sm:h-60 rounded-2xl overflow-hidden border-2 border-primary/30 shadow-xl mb-6 bg-primary/10">
@@ -428,7 +238,7 @@
 
                     <div class="relative z-10">
                         <h3 id="aboutNameLeftDisplay" class="font-display-lg text-2xl font-bold text-gradient">Mohamed</h3>
-                        <p id="aboutRoleLeftDisplay" class="font-label-mono text-xs tracking-widest uppercase text-card-desc mt-1 font-semibold">GEOGRAPHY & GIS STUDENT</p>
+                        <p id="aboutRoleLeftDisplay" class="font-label-mono text-xs text-card-desc mt-1 font-semibold">GEOGRAPHY & GIS STUDENT</p>
                     </div>
                 </div>
 
@@ -450,7 +260,7 @@
                                     <span class="material-symbols-outlined text-xl">school</span>
                                 </div>
                                 <div>
-                                    <span class="block font-label-mono text-[11px] uppercase text-card-desc font-semibold">University</span>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">University</span>
                                     <span id="aboutUniDisplay" class="font-bold text-sm sm:text-base text-card-title">Hassan II University</span>
                                 </div>
                             </div>
@@ -460,7 +270,7 @@
                                     <span class="material-symbols-outlined text-xl">map</span>
                                 </div>
                                 <div>
-                                    <span class="block font-label-mono text-[11px] uppercase text-card-desc font-semibold">Major</span>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">Major</span>
                                     <span id="aboutMajorDisplay" class="font-bold text-sm sm:text-base text-card-title">Geography & GIS</span>
                                 </div>
                             </div>
@@ -470,7 +280,7 @@
                                     <span class="material-symbols-outlined text-xl">public</span>
                                 </div>
                                 <div>
-                                    <span class="block font-label-mono text-[11px] uppercase text-card-desc font-semibold">Country</span>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">Country</span>
                                     <span id="aboutCountryDisplay" class="font-bold text-sm sm:text-base text-card-title">Morocco</span>
                                 </div>
                             </div>
@@ -480,7 +290,7 @@
                                     <span class="material-symbols-outlined text-xl">translate</span>
                                 </div>
                                 <div>
-                                    <span class="block font-label-mono text-[11px] uppercase text-card-desc font-semibold">Languages</span>
+                                    <span class="block font-label-mono text-[11px] text-card-desc font-semibold">Languages</span>
                                     <span id="aboutLangDisplay" class="font-bold text-sm sm:text-base text-card-title">Arabic • English • French</span>
                                 </div>
                             </div>
@@ -778,7 +588,7 @@ window.addEventListener('DOMContentLoaded', () => {
                                 <h4 class="text-sm font-semibold text-secondary mb-1 flex items-center gap-1.5">
                                     <span class="material-symbols-outlined text-base">account_balance</span> ${e.institution}
                                 </h4>
-                                ${e.major ? `<p class="text-xs text-sky-400 font-label-mono mb-3">Major: ${e.major}</p>` : ''}
+                                ${e.major ? `<p class="text-xs text-secondary font-label-mono mb-3">Major: ${e.major}</p>` : ''}
                                 <p class="text-xs text-card-desc leading-relaxed mt-2">${e.description || ''}</p>
                             </div>
                         </div>
@@ -854,5 +664,13 @@ window.addEventListener('DOMContentLoaded', () => {
         const observer = new MutationObserver(protectIcons);
         observer.observe(document.body, { childList: true, subtree: true });
     </script>
+
+<script>
+(function(){
+  const links=[...document.querySelectorAll('nav a[href^="#"]')].filter(a=>a.id!=='btnContact');
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('is-active',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-40% 0px -55% 0px'});
+  links.forEach(a=>{const t=document.querySelector(a.getAttribute('href'));if(t)io.observe(t)});
+})();
+</script>
 </body>
 </html>
