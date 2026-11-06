@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoVision - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root{--bg:#061a1c;--panel:#0a2327;--line:rgba(232,243,241,.12);--ink:#e8f3f1;--mute:#86a6a8;--acc:#5eead4;--acc-ink:#04302b}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;background:var(--bg);color:var(--ink);font-family:'Instrument Sans',system-ui,sans-serif}
+        :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+        .hero{position:relative;overflow:hidden;padding:48px 56px;display:flex;flex-direction:column;justify-content:space-between;background:var(--panel);border-right:1px solid var(--line)}
+        .hero::before{content:"";position:absolute;left:-140px;bottom:-180px;width:720px;height:720px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 22px,rgba(94,234,212,.16) 22px 23px);pointer-events:none}
+        .hero::after{content:"";position:absolute;right:-90px;top:-90px;width:320px;height:320px;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 16px,rgba(94,234,212,.1) 16px 17px);pointer-events:none}
+        .brand{position:relative;z-index:1;display:flex;align-items:center;gap:10px;font:800 1.3rem 'Bricolage Grotesque',sans-serif}
+        .brand i{width:36px;height:36px;display:grid;place-items:center;border-radius:9px;background:var(--acc);color:var(--acc-ink)}
+        .pitch{position:relative;z-index:1;max-width:460px}
+        .pitch h1{font:800 clamp(2rem,3.6vw,3.2rem)/1.08 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em}
+        .pitch p{margin-top:16px;color:var(--mute);line-height:1.6}
+        .coords{position:relative;z-index:1;font:500 .8rem 'JetBrains Mono',monospace;color:var(--acc)}
+        .panel{display:flex;align-items:center;justify-content:center;padding:32px}
+        .card{width:100%;max-width:380px}
+        .card h2{font:700 1.6rem 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+        .card .sub{color:var(--mute);margin:6px 0 28px;font-size:.92rem}
+        form{display:flex;flex-direction:column;gap:16px}
+        .field{display:flex;flex-direction:column;gap:7px}
+        .field label{font-size:.82rem;font-weight:600;color:var(--mute)}
+        input{padding:13px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+        input::placeholder{color:rgba(134,166,168,.5)}
+        input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(94,234,212,.16)}
+        button{margin-top:6px;padding:13px;border:0;border-radius:8px;background:var(--acc);color:var(--acc-ink);font:700 1rem 'Instrument Sans',sans-serif;cursor:pointer;transition:filter .2s}
+        button:hover{filter:brightness(1.1)}
+        .hidden{display:none}
+        #errorMsg{margin-top:16px;padding:10px 12px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.1);color:#fca5a5;font-size:.88rem}
+        .back{display:inline-block;margin-top:28px;color:var(--mute);font-size:.88rem;text-decoration:none}
+        .back:hover{color:var(--acc)}
+        @keyframes rise{from{opacity:0;transform:translateY(12px)}}
+        .card{animation:rise .6s cubic-bezier(.2,.7,.2,1)}
+        @media(max-width:860px){body{grid-template-columns:1fr}.hero{display:none}}
+        @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+    </style>
+</head>
+<body>
+
+    <aside class="hero">
+        <div class="brand"><i class="fa-solid fa-earth-africa"></i> GeoVision</div>
+        <div class="pitch">
+            <h1>Your portfolio, edited in one place.</h1>
+            <p>Update projects, skills and credentials. Changes appear on the site as soon as you save.</p>
+        </div>
+        <div class="coords">33.5731° N, 7.5898° W</div>
+    </aside>
+
+    <main class="panel">
+        <div class="card">
+            <h2>Admin Dashboard Login</h2>
+            <p class="sub">Sign in to manage your portfolio.</p>
+
+            <form id="loginForm">
+                <div class="field"><label for="email">Email</label><input type="email" id="email" placeholder="you@example.com" required></div>
+                <div class="field"><label for="password">Password</label><input type="password" id="password" placeholder="Your password" required></div>
+                <button type="submit">Sign In</button>
+            </form>
+
+            <p id="errorMsg" class="hidden"></p>
+            <a class="back" href="index.html">Back to portfolio</a>
+        </div>
+    </main>
+
+    <script>
+        // مفاتيح الربط الخاصة بك
+        const SUPABASE_URL = "https://brydreaiwlbzbagsvezd.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_JsfgZNNi3-rS57fg8HwfeA_k604yWcv";
+        
+        // إنشاء عميل الاتصال بـ Supabase
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // التعامل مع عملية تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            errorMsg.classList.add('hidden');
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ 
+                email: email, 
+                password: password 
+            });
+
+            if (error) {
+                errorMsg.innerText = "Incorrect email or password!";
+                errorMsg.classList.remove('hidden');
+            } else {
+                // حفظ مفتاح الجلسة للتوافق مع حماية الداشبورد
+                sessionStorage.setItem('geovision_auth', 'true');
+
+                // عند نجاح الدخول ينقلك تلقائياً إلى الداشبورد
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+
+</body>
+</html>
